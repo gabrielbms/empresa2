@@ -182,10 +182,10 @@ public class FornecedorTest {
     }
 
     /**
-     * Deve testar o set telefones.
+     * Deve testar o exception do set telefones.
      */
     @Test(expected = IllegalArgumentException.class)
-    public void deve_testar_o_setTelefones() {
+    public void deve_testar_o_exception_do_setTelefones() {
         Set<Telefone> telefone = new HashSet<>();
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
@@ -197,7 +197,7 @@ public class FornecedorTest {
      * Deve testar o set telefoness.
      */
     @Test
-    public void deve_testar_o_setTelefoness() {
+    public void deve_testar_o_setTelefones() {
         Set<Telefone> telefone = new HashSet<>();
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         fornecedor.setTelefones(telefone);
@@ -205,22 +205,22 @@ public class FornecedorTest {
     }
 
     /**
-     * Deve testar o set enderecos.
+     * Deve testar o expection do set enderecos.
      */
     @Test(expected = IllegalArgumentException.class)
-    public void deve_testar_o_setEnderecos() {
+    public void deve_testar_o_exception_do_setEnderecos() {
         Set<Endereco> endereco = new HashSet<>();
         endereco.add(Fixture.from(Endereco.class).gimme("valido"));
         endereco.add(Fixture.from(Endereco.class).gimme("valido"));
         endereco.add(Fixture.from(Endereco.class).gimme("valido"));
         fornecedor.setEnderecos(endereco);
     }
-
+    
     /**
-     * Deve testar o set enderecoss.
+     * Deve testar o set enderecos.
      */
     @Test
-    public void deve_testar_o_setEnderecoss() {
+    public void deve_testar_o_setEnderecos() {
         Set<Endereco> endereco = new HashSet<>();
         endereco.add(Fixture.from(Endereco.class).gimme("valido"));
         fornecedor.setEnderecos(endereco);

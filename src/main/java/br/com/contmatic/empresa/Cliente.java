@@ -33,15 +33,15 @@ public class Cliente {
     private String cpf;
 
     /** The nome. */
-    @Pattern(regexp = RegexType.NOME, message = "O nome do cliente está incorreto")
-    @NotBlank(message = "O campo nome não pode estar vazio")
     @Length(min = 3, max = 70)
+    @NotBlank(message = "O campo nome não pode estar vazio")
+    @Pattern(regexp = RegexType.LETRAS, message = "O nome do cliente está incorreto")    
     private String nome;
 
     /** The email. */
+    @Size(min = 5, max = 100)
     @Email(message = "O email do funcionario está invalido")
     @NotBlank(message = "O campo e-mail não pode estar vazio")
-    @Size(min = 5, max = 90)
     private String email;
 
     /** The telefones. */
@@ -50,8 +50,8 @@ public class Cliente {
     private Set<Telefone> telefones;
 
     /** The boleto. */
-    @NotEmpty(message = "O campo boleto não pode estar nulo")
     @Range(min = (long) 1.00, max = (long) 9999.00)
+    @NotEmpty(message = "O campo boleto não pode estar nulo")    
     private BigDecimal boleto;
 
     /** The informacao inutil. */

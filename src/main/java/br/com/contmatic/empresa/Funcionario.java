@@ -30,14 +30,14 @@ public class Funcionario {
     private String cpf;
 
     /** The nome. */
-    @Pattern(regexp = RegexType.NOME, message = "O nome do funcionario está incorreto")
-    @NotBlank(message = "O campo nome não pode estar nulo")
     @Size(min = 3, max = 20)
+    @NotBlank(message = "O campo nome não pode estar nulo")
+    @Pattern(regexp = RegexType.LETRAS, message = "O nome do funcionario está incorreto")    
     private String nome;
 
     /** The idade. */
-    @Min(value = 1, message = "A idade do funcionario não pode ser menor que 1")
     @NotEmpty
+    @Min(value = 1, message = "A idade do funcionario não pode ser menor que 1")
     private Integer idade;
 
     /** The telefones. */

@@ -26,32 +26,32 @@ import br.com.contmatic.util.RegexType;
 public class Empresa {
 
     /** The cnpj. */
+    @Length(min = 17, max = 19)
     @CNPJ(message = "O CNPJ do funcionario está inválido")
     @NotBlank(message = "O campo CPF não pode estar nulo")
-    @Length(min = 17, max = 19)
     private String cnpj;
 
     /** The nome. */
-    @Pattern(regexp = RegexType.NOME, message = "O nome da empresa está incorreto")
+    @Length(min = 2, max = 40)
     @Pattern(regexp = "^[a-zà-úA-ZÀ-Ú_ ]*$")
     @NotBlank(message = "O campo nome não pode estar nulo")
-    @Length(min = 2, max = 40)
+    @Pattern(regexp = RegexType.LETRAS, message = "O nome da empresa está incorreto")
     private String nome;
 
     /** The site. */
     @URL
-    @NotBlank(message = "O campo site não pode estar nulo")
     @Length(min = 5, max = 60)
+    @NotBlank(message = "O campo site não pode estar nulo")
     private String site;
 
     /** The telefones. */
-    @NotEmpty
     @Valid
+    @NotEmpty
     private Set<Telefone> telefones;
 
     /** The enderecos. */
-    @NotEmpty
     @Valid
+    @NotEmpty
     private Set<Endereco> enderecos;
 
     /**

@@ -214,7 +214,7 @@ public class EmpresaTest {
      * Deve testar o set endereco esta funcionando corretamente.
      */
     @Test
-    public void deve_testar_o_setEndereco_esta_funcionando_corretamente() {
+    public void deve_testar_o_getEndereco_esta_funcionando_corretamente() {
         empresa.getEndereco();
         assertThat(empresa.toString(), containsString("cep="));
     }
@@ -223,7 +223,7 @@ public class EmpresaTest {
      * Deve testar o set site esta funcionando corretamente.
      */
     @Test
-    public void deve_testar_o_setSite_esta_funcionando_corretamente() {
+    public void deve_testar_o_getSite_esta_funcionando_corretamente() {
         empresa.getSite();
         assertThat(empresa.toString(), containsString("www."));
     }

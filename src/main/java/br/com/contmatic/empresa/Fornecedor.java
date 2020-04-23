@@ -26,32 +26,32 @@ import br.com.contmatic.util.RegexType;
 public class Fornecedor {
 
     /** The cnpj. */
-    @CNPJ(message = "O CNPJ do funcionario está inválido")
-    @Pattern(regexp = "\\d{2}.?\\d{3}.?\\d{3}/?\\d{4}-?\\d{2}")
-    @NotBlank(message = "O campo CNPJ não pode estar nulo")
     @Length(min = 17, max = 19)
+    @CNPJ(message = "O CNPJ do funcionario está inválido")
+    @NotBlank(message = "O campo CNPJ não pode estar nulo")
+    @Pattern(regexp = "\\d{2}.?\\d{3}.?\\d{3}/?\\d{4}-?\\d{2}")
     private String cnpj;
 
     /** The nome. */
-    @Pattern(regexp = RegexType.NOME, message = "O nome do fornecedor está incorreto")
+    @Length(min = 2, max = 40)
     @Pattern(regexp = "^[a-zA-Z0-9_ ]*$")
     @NotBlank(message = "O campo nome não pode estar nulo")
-    @Length(min = 2, max = 40)
+    @Pattern(regexp = RegexType.LETRAS, message = "O nome do fornecedor está incorreto")
     private String nome;
 
     /** The telefones. */
-    @NotEmpty(message = "O campo telefone não pode estar nulo")
     @Valid
+    @NotEmpty(message = "O campo telefone não pode estar nulo")
     private Set<Telefone> telefones;
 
     /** The produto. */
-    @NotBlank(message = "O campo produto não pode estar nulo")
     @Length(min = 2, max = 50)
+    @NotBlank(message = "O campo produto não pode estar nulo")
     private String produto;
 
     /** The enderecos. */
-    @NotEmpty(message = "O campo endereco não pode estar nulo")
     @Valid
+    @NotEmpty(message = "O campo endereco não pode estar nulo")
     private Set<Endereco> enderecos;
 
     /**

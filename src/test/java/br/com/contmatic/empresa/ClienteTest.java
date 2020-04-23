@@ -42,7 +42,7 @@ public class ClienteTest {
 
     /** The cliente. */
     private static Cliente cliente;
-    
+
     /** The validator. */
     private Validator validator;
 
@@ -158,7 +158,7 @@ public class ClienteTest {
      * Deve testar o get cpf esta funcionando corretamente.
      */
     @Test
-    public void deve_testar_o_getCpf_esta_funcionando_corretamente() {
+    public void deve_testar_o_setCpf_esta_funcionando_corretamente() {
         cliente.setCpf("437.018.888-18");
         assertThat(cliente.getCpf(), containsString("437.018.888-18"));
     }
@@ -175,7 +175,7 @@ public class ClienteTest {
      * Deve testar o get nome esta funcionando corretamente.
      */
     @Test
-    public void deve_testar_o_getNome_esta_funcionando_corretamente() {
+    public void deve_testar_o_setNome_esta_funcionando_corretamente() {
         cliente.setNome("Gabriel");
         assertThat(cliente.getNome(), containsString("Gabriel"));
     }
@@ -184,7 +184,7 @@ public class ClienteTest {
      * Deve testar o get email esta funcionando corretamente.
      */
     @Test
-    public void deve_testar_o_getEmail_esta_funcionando_corretamente() {
+    public void deve_testar_o_setEmail_esta_funcionando_corretamente() {
         cliente.setEmail("bueno@hotmail.com.br");
         assertThat(cliente.getEmail(), containsString("bueno@hotmail.com.br"));
     }
@@ -193,7 +193,7 @@ public class ClienteTest {
      * Deve testar o get telefone esta funcionando corretamente.
      */
     @Test
-    public void deve_testar_o_getTelefone_esta_funcionando_corretamente() {
+    public void deve_testar_o_setTelefone_esta_funcionando_corretamente() {
         cliente = Fixture.from(Cliente.class).gimme("valido");
         assertTrue(cliente.equals(cliente));
     }
@@ -202,7 +202,7 @@ public class ClienteTest {
      * Deve testar o get boleto esta funcionando corretamente.
      */
     @Test
-    public void deve_testar_o_getBoleto_esta_funcionando_corretamente() {
+    public void deve_testar_o_setBoleto_esta_funcionando_corretamente() {
         cliente.setBoleto(BigDecimal.valueOf(250.00));
         assertThat(cliente.getBoleto(), is(BigDecimal.valueOf(250.00)));
     }
@@ -211,7 +211,7 @@ public class ClienteTest {
      * Deve testar o get informacao inutil esta funcionando corretamente.
      */
     @Test
-    public void deve_testar_o_getInformacaoInutil_esta_funcionando_corretamente() {
+    public void deve_testar_o_setInformacaoInutil_esta_funcionando_corretamente() {
         cliente.setInformacaoInutil(null);
         assertNull(cliente.getInformacaoInutil());
     }

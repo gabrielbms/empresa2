@@ -17,15 +17,15 @@ import br.com.contmatic.util.RegexType;
 public class Endereco {
 
     /** The cep. */
-    @Pattern(regexp = RegexType.CEP, message = "O CEP do endereco está incorreto")
-    @NotBlank(message = "O campo CEP não pode estar nulo")
     @Size(min = 8, max = 9)
+    @NotBlank(message = "O campo CEP não pode estar nulo")
+    @Pattern(regexp = RegexType.CEP, message = "O CEP do endereco está incorreto")
     private String cep;
 
     /** The rua. */
-    @NotBlank(message = "O campo rua não pode estar nulo")
     @Size(min = 3, max = 60)
-    @Pattern(regexp = RegexType.ENDERECO, message = "A rua do endereço está incorreto")
+    @NotBlank(message = "O campo rua não pode estar nulo")
+    @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "A rua do endereço está incorreto")
     private String rua;
 
     /** The numero. */
@@ -33,21 +33,21 @@ public class Endereco {
     private Integer numero;
 
     /** The complemento. */
-    @NotBlank(message = "O campo complemento não pode estar nulo")
     @Size(min = 2, max = 60)
-    @Pattern(regexp = RegexType.ENDERECO, message = "A rua do endereço está incorreto")
+    @NotBlank(message = "O campo complemento não pode estar nulo")
+    @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "A rua do endereço está incorreto")
     private String complemento;
 
     /** The bairro. */
-    @NotBlank(message = "O campo bairro não pode estar nulo")
     @Size(min = 3, max = 30)
-    @Pattern(regexp = RegexType.ENDERECO, message = "A rua do endereço está incorreto")
+    @NotBlank(message = "O campo bairro não pode estar nulo")
+    @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "A rua do endereço está incorreto")
     private String bairro;
 
     /** The cidade. */
-    @NotBlank(message = "O campo cidade não pode estar nulo")
     @Size(min = 3, max = 25)
-    @Pattern(regexp = RegexType.ENDERECO, message = "A rua do endereço está incorreto")
+    @NotBlank(message = "O campo cidade não pode estar nulo")
+    @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "A rua do endereço está incorreto")
     private String cidade;
 
     /** The estado. */

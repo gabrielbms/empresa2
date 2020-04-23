@@ -21,9 +21,9 @@ public class Telefone {
     private TelefoneDDD ddd;
   
     /** The numero. */
-    @NotBlank(message = "O campo número não pode estar nulo")
     @Size(min = 8, max = 10)
-    @Pattern(regexp = RegexType.NUMERO, message = "O campo Numero não pode estar invalido")
+    @NotBlank(message = "O campo número não pode estar nulo")
+    @Pattern(regexp = RegexType.NUMEROS, message = "O campo Numero não pode estar invalido")
     private String numero;
     
     /** The tipo telefone. */

@@ -12,13 +12,13 @@ public final class RegexType {
     public static final String CEP = "^[[0-9]{5}-[\\\\d]{3}]+$";
     
     /** The Constant NOME. */
-    public static final String NOME = "^[a-zà-úA-ZÀ-Ú_ ]*$";
+    public static final String LETRAS = "^[a-zà-úA-ZÀ-Ú_ ]*$";
     
     /** The Constant ENDERECO. */
-    public static final String ENDERECO = "^[A-Za-záÁ-úÚÇÑ0-9_ '\\\\s]+$";
+    public static final String LETRAS_NUMEROS = "^[A-Za-záÁ-úÚÇÑ0-9_ '\\\\s]+$";
     
     /** The Constant NUMERO. */
-    public static final String NUMERO = "^[0-9_ ]*$";
+    public static final String NUMEROS = "^[0-9_ ]*$";
 
     /**
      * Instantiates a new regex type.
