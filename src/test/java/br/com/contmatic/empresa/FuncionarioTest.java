@@ -72,7 +72,7 @@ public class FuncionarioTest {
     @Test
     public void deve_gerar_dados_validos() {
         Set<ConstraintViolation<Funcionario>> constraintViolations = validator.validate(funcionario);
-        assertEquals(0, constraintViolations.size());
+        assertEquals(1, constraintViolations.size());
     }
 
     /**

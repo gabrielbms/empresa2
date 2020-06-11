@@ -30,8 +30,8 @@ public class EmpresaFixtureFactory implements TemplateLoader {
     public void load() {
         Fixture.of(Cliente.class).addTemplate("valido", new Rule() {
             {
-                add("cpf", random("339.655.101-00", "012.835.133-07", "924.421.582-99", "816.454.121-48"));
-                add("nome", random("Gabriel", "Bueno"));
+                add("cpf", random("33965510100", "01283513307", "92442158299", "81645412148"));
+                add("nome", random("Gabriel", "Bueno", "Santos"));
                 add("email", random("gabriel@hotmail.com", "bueno@gmail.com", "julia@bol.com.br"));
                 add("telefones", has(1).of(Telefone.class, "valido"));
                 add("boleto", BigDecimal.valueOf(250.00));
@@ -41,8 +41,8 @@ public class EmpresaFixtureFactory implements TemplateLoader {
 
         Fixture.of(Empresa.class).addTemplate("valido", new Rule() {
             {
-                add("cnpj", random("21.298.596/0001-28", "71.388.515/0001-59", "13.934.077/0001-80"));
-                add("nome", random("Gabriel", "Bueno"));
+                add("cnpj", random("21298596000128", "71388515000159", "13934077000180"));
+                add("nome", random("Gabriel", "Bueno", "Santos"));
                 add("site", random("http://www.gbconsertos.com.br", "http://www.gbconsertos.com"));
                 add("telefones", has(1).of(Telefone.class, "valido"));
                 add("enderecos", has(1).of(Endereco.class, "valido"));
@@ -51,8 +51,8 @@ public class EmpresaFixtureFactory implements TemplateLoader {
 
         Fixture.of(Fornecedor.class).addTemplate("valido", new Rule() {
             {
-                add("cnpj", random("36.621.217/0001-66", "59.660.254/0001-89", "81.398.148/0001-28"));
-                add("nome", random("Gabriel", "Gustavo"));
+                add("cnpj", random("36621217000166", "59660254000189", "81398148000128"));
+                add("nome", random("Gabriel", "Gustavo", "Santos"));
                 add("telefones", has(1).of(Telefone.class, "valido"));
                 add("produto", random("5 placas maes", "2 processador intel I3"));
                 add("enderecos", has(1).of(Endereco.class, "valido"));
@@ -61,8 +61,8 @@ public class EmpresaFixtureFactory implements TemplateLoader {
 
         Fixture.of(Funcionario.class).addTemplate("valido", new Rule() {
             {
-                add("cpf", random("339.655.101-00", "012.835.133-07", "924.421.582-99", "816.454.121-48"));
-                add("nome", random("Gabriel", "Gustavo"));
+                add("cpf", random("33965510100", "01283513307", "92442158299", "81645412148"));
+                add("nome", random("Gabriel", "Gustavo", "Santos"));
                 add("idade", random(02, 05, 10, 15, 20));
                 add("telefones", has(1).of(Telefone.class, "valido"));
                 add("enderecos", has(1).of(Endereco.class, "valido"));

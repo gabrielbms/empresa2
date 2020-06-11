@@ -26,7 +26,7 @@ import br.com.contmatic.util.RegexType;
 public class Fornecedor {
 
     /** The cnpj. */
-    @Length(min = 17, max = 19)
+    @Length(min = 14, max = 14)
     @CNPJ(message = "O CNPJ do funcionario está inválido")
     @NotBlank(message = "O campo CNPJ não pode estar nulo")
     @Pattern(regexp = "\\d{2}.?\\d{3}.?\\d{3}/?\\d{4}-?\\d{2}")

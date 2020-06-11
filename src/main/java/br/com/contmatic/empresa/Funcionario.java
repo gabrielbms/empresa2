@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.br.CPF;
 import org.joda.time.LocalDate;
 
@@ -25,6 +26,7 @@ import br.com.contmatic.util.RegexType;
 public class Funcionario {
 
     /** The cpf. */
+    @Length(min = 11, max = 11)
     @CPF(message = "O CPF do funcionario está inválido")
     @NotBlank(message = "O campo CPF não pode estar nulo")
     private String cpf;
