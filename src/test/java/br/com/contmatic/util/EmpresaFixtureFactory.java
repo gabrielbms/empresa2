@@ -34,8 +34,7 @@ public class EmpresaFixtureFactory implements TemplateLoader {
                 add("nome", random("Gabriel", "Bueno", "Santos"));
                 add("email", random("gabriel@hotmail.com", "bueno@gmail.com", "julia@bol.com.br"));
                 add("telefones", has(1).of(Telefone.class, "valido"));
-                add("boleto", BigDecimal.valueOf(250.00));
-                add("informacaoInutil", (null));
+                add("boleto", BigDecimal.valueOf(2500.00));
             }
         });
 
@@ -43,7 +42,7 @@ public class EmpresaFixtureFactory implements TemplateLoader {
             {
                 add("cnpj", random("21298596000128", "71388515000159", "13934077000180"));
                 add("nome", random("Gabriel", "Bueno", "Santos"));
-                add("site", random("http://www.gbconsertos.com.br", "http://www.gbconsertos.com"));
+                add("site", random("http://www.gbconsertos.com.br"));
                 add("telefones", has(1).of(Telefone.class, "valido"));
                 add("enderecos", has(1).of(Endereco.class, "valido"));
             }
@@ -63,12 +62,12 @@ public class EmpresaFixtureFactory implements TemplateLoader {
             {
                 add("cpf", random("33965510100", "01283513307", "92442158299", "81645412148"));
                 add("nome", random("Gabriel", "Gustavo", "Santos"));
-                add("idade", random(02, 05, 10, 15, 20));
+                add("idade", random(20, 25, 30, 35, 40));
                 add("telefones", has(1).of(Telefone.class, "valido"));
                 add("enderecos", has(1).of(Endereco.class, "valido"));
                 add("salario", BigDecimal.valueOf(2500.00));
                 add("dataContratacao", random(new LocalDate(2019, 05, 05)));
-                add("dataSalario", random(new LocalDate(2020, 05, 05), new LocalDate(2020, 06, 06), new LocalDate(2020, 07, 07)));
+                add("dataSalario", random(new LocalDate(2021, 05, 05), new LocalDate(2021, 06, 06), new LocalDate(2021, 07, 07)));
 
             }
         });

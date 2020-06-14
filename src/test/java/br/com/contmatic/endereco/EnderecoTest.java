@@ -25,7 +25,6 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import br.com.contmatic.endereco.Endereco;
 import br.com.contmatic.util.Annotations;
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
@@ -48,7 +47,6 @@ public class EnderecoTest {
     @BeforeClass
     public static void InicioDosTestes() {
         FixtureFactoryLoader.loadTemplates("br.com.contmatic.util");
-        System.out.println("Iniciamos os testes na classe endereco");
     }
 
     /**
@@ -420,9 +418,6 @@ public class EnderecoTest {
      */
     @AfterClass
     public static void teste_no_toString() {
-        System.out.println(endereco);
-        System.out.println("Finalizamos os testes na classe endereco\n");
-        System.out.println("-----/-----/-----/-----/-----/-----/-----\n");
     }
 
 }

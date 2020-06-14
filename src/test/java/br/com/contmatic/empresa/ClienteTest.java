@@ -2,10 +2,10 @@ package br.com.contmatic.empresa;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.runners.MethodSorters.NAME_ASCENDING;
@@ -18,8 +18,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
-import static org.hamcrest.Matchers.*;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -52,7 +50,6 @@ public class ClienteTest {
     @BeforeClass
     public static void setUpBeforeClass() {
         FixtureFactoryLoader.loadTemplates("br.com.contmatic.util");
-        System.out.println("Iniciamos os testes na classe cliente");
     }
 
     /**
@@ -147,28 +144,12 @@ public class ClienteTest {
     }
 
     /**
-     * Deve aceitar informação inutil nula.
-     */
-    @Test
-    public void deve_aceitar_informaçãoInutil_nula() {
-        assertNull(cliente.getInformacaoInutil());
-    }
-
-    /**
      * Deve testar o get cpf esta funcionando corretamente.
      */
     @Test
     public void deve_testar_o_setCpf_esta_funcionando_corretamente() {
         cliente.setCpf("437.018.888-18");
         assertThat(cliente.getCpf(), containsString("437.018.888-18"));
-    }
-
-    /**
-     * Deve testar o exception do setcpf.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void deve_testar_o_exception_do_setcpf() {
-        cliente.setCpf(null);
     }
 
     /**
@@ -208,20 +189,13 @@ public class ClienteTest {
     }
 
     /**
-     * Deve testar o get informacao inutil esta funcionando corretamente.
-     */
-    @Test
-    public void deve_testar_o_setInformacaoInutil_esta_funcionando_corretamente() {
-        cliente.setInformacaoInutil(null);
-        assertNull(cliente.getInformacaoInutil());
-    }
-
-    /**
      * Deve testar o exception do set telefones.
      */
     @Test(expected = IllegalArgumentException.class)
     public void deve_testar_o_exception_do_setTelefones() {
         Set<Telefone> telefone = new HashSet<>();
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
@@ -390,15 +364,6 @@ public class ClienteTest {
     }
 
     /**
-     * Deve validar informacoes annotations.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void deve_validar_informacoes_annotations() {
-        Cliente cadastroValidator = Fixture.from(Cliente.class).gimme("valido");
-        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getInformacaoInutil()));
-    }
-
-    /**
      * Tear down.
      */
     @After
@@ -411,8 +376,5 @@ public class ClienteTest {
      */
     @AfterClass
     public static void TearDownAfterClass() {
-        System.out.println(cliente);
-        System.out.println("Finalizamos os testes na classe cliente\n");
-        System.out.println("-----/-----/-----/-----/-----/-----/-----\n");
     }
 }

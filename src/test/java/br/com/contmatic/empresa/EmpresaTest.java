@@ -8,14 +8,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-
-import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
 import static org.junit.runners.MethodSorters.NAME_ASCENDING;
 
 import java.util.HashSet;
@@ -26,7 +18,14 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import br.com.contmatic.empresa.Empresa;
+import org.hamcrest.Matchers;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+
 import br.com.contmatic.endereco.Endereco;
 import br.com.contmatic.telefone.Telefone;
 import br.com.contmatic.util.Annotations;
@@ -51,7 +50,6 @@ public class EmpresaTest {
     @BeforeClass
     public static void setUpBeforeClass() {
         FixtureFactoryLoader.loadTemplates("br.com.contmatic.util");
-        System.out.println("Iniciamos os testes na classe empresa");
     }
 
     /**
@@ -173,6 +171,8 @@ public class EmpresaTest {
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         empresa.setTelefones(telefone);
     }
 
@@ -224,8 +224,7 @@ public class EmpresaTest {
      */
     @Test
     public void deve_testar_o_getSite_esta_funcionando_corretamente() {
-        empresa.getSite();
-        assertThat(empresa.toString(), containsString("www."));
+        assertTrue(empresa.getSite().equals("http://www.gbconsertos.com.br"));
     }
 
     /**
@@ -392,9 +391,6 @@ public class EmpresaTest {
      */
     @AfterClass
     public static void TearDownAfterClass() {
-        System.out.println(empresa);
-        System.out.println("Finalizamos os testes na classe empresa\n");
-        System.out.println("-----/-----/-----/-----/-----/-----/-----\n");
     }
 
 }

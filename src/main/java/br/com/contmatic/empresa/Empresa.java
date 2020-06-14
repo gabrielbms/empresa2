@@ -32,7 +32,7 @@ public class Empresa {
     private String cnpj;
 
     /** The nome. */
-    @Length(min = 2, max = 40)
+    @Length(min = 2, max = 80)
     @Pattern(regexp = "^[a-zà-úA-ZÀ-Ú_ ]*$")
     @NotBlank(message = "O campo nome não pode estar nulo")
     @Pattern(regexp = RegexType.LETRAS, message = "O nome da empresa está incorreto")
@@ -76,93 +76,43 @@ public class Empresa {
 
     }
 
-    /**
-     * Gets the cnpj.
-     *
-     * @return the cnpj
-     */
     public String getCnpj() {
         return cnpj;
     }
 
-    /**
-     * Sets the cnpj.
-     *
-     * @param cnpj the new cnpj
-     */
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
 
-    /**
-     * Gets the nome.
-     *
-     * @return the nome
-     */
     public String getNome() {
         return nome;
     }
 
-    /**
-     * Sets the nome.
-     *
-     * @param nome the new nome
-     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /**
-     * Gets the site.
-     *
-     * @return the site
-     */
     public String getSite() {
         return site;
     }
 
-    /**
-     * Sets the site.
-     *
-     * @param site the new site
-     */
     public void setSite(String site) {
         this.site = site;
     }
 
-    /**
-     * Gets the telefone.
-     *
-     * @return the telefone
-     */
     public @Valid Set<Telefone> getTelefone() {
         return telefones;
     }
 
-    /**
-     * Gets the endereco.
-     *
-     * @return the endereco
-     */
     public @Valid Set<Endereco> getEndereco() {
         return enderecos;
     }
 
-    /**
-     * Sets the telefones.
-     *
-     * @param telefone the new telefones
-     */
     public void setTelefones(Set<Telefone> telefone) {
         Preconditions.checkArgument(telefone.size() < 2, "Somente pode possuir um telefone");
         this.telefones = telefone;
     }
 
-    /**
-     * Sets the enderecos.
-     *
-     * @param endereco the new enderecos
-     */
     public void setEnderecos(Set<Endereco> endereco) {
         Preconditions.checkArgument(endereco.size() < 2, "Somente pode possuir um endereco");
         this.enderecos = endereco;

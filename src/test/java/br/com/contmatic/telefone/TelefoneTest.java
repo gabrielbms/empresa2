@@ -52,7 +52,6 @@ public class TelefoneTest {
     @BeforeClass
     public static void InicioDosTestes() {
         FixtureFactoryLoader.loadTemplates("br.com.contmatic.util");
-        System.out.println("Iniciamos os testes na classe telefone");
     }
 
     /**
@@ -124,16 +123,34 @@ public class TelefoneTest {
     @Test
     public void deve_testar_o_getDdd_esta_funcionando_corretamente() {
         telefoneDDD = TelefoneDDD.valueOf("DDD11");
-        assertTrue(telefoneDDD.getComplemento().equals("São Paulo – SP") | telefoneDDD.getDdd() == 11);
+        assertTrue(telefoneDDD.getDdd() == 11);
+    }
+    
+    /**
+     * Deve testar o get complemento esta funcionando corretamente.
+     */
+    @Test
+    public void deve_testar_o_getComplemento_esta_funcionando_corretamente() {
+        telefoneDDD = TelefoneDDD.valueOf("DDD11");
+        assertTrue(telefoneDDD.getComplemento().equals("São Paulo – SP"));
     }
 
     /**
-     * Deve testar o get ddd esta funcionando corretameante.
+     * Deve testar o get descricao esta funcionando corretameante.
      */
     @Test
-    public void deve_testar_o_getDdd_esta_funcionando_corretameante() {
+    public void deve_testar_o_getDescricao_esta_funcionando_corretameante() {
         tipoTelefone = TipoTelefone.CELULAR;
-        assertTrue(tipoTelefone.getDescricao().equals("Celular") | tipoTelefone.getTamanho() == 9);
+        assertTrue(tipoTelefone.getDescricao().equals("Celular"));
+    }
+    
+    /**
+     * Deve testar o get tamanho esta funcionando corretameante.
+     */
+    @Test
+    public void deve_testar_o_getTamanho_esta_funcionando_corretameante() {
+        tipoTelefone = TipoTelefone.CELULAR;
+        assertTrue(tipoTelefone.getTamanho() == 9);
     }
 
     /**
@@ -204,7 +221,6 @@ public class TelefoneTest {
      */
     @After
     public void tearDown() {
-
     }
 
     /**
@@ -212,9 +228,6 @@ public class TelefoneTest {
      */
     @AfterClass
     public static void teste_no_toString() {
-        System.out.println(telefone);
-        System.out.println("Finalizamos os testes na classe endereco\n");
-
     }
 
 }

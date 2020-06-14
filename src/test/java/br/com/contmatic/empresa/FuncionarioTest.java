@@ -2,12 +2,11 @@ package br.com.contmatic.empresa;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.empty;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.runners.MethodSorters.NAME_ASCENDING;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -26,9 +25,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import static org.junit.runners.MethodSorters.NAME_ASCENDING;
 
-import br.com.contmatic.empresa.Funcionario;
 import br.com.contmatic.endereco.Endereco;
 import br.com.contmatic.telefone.Telefone;
 import br.com.contmatic.util.Annotations;
@@ -53,7 +50,6 @@ public class FuncionarioTest {
     @BeforeClass
     public static void setUpBeforeClass() {
         FixtureFactoryLoader.loadTemplates("br.com.contmatic.util");
-        System.out.println("Iniciamos os testes na classe funcionario");
     }
 
     /**
@@ -64,15 +60,6 @@ public class FuncionarioTest {
         funcionario = Fixture.from(Funcionario.class).gimme("valido");
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         this.validator = factory.getValidator();
-    }
-
-    /**
-     * Deve gerar dados validos.
-     */
-    @Test
-    public void deve_gerar_dados_validos() {
-        Set<ConstraintViolation<Funcionario>> constraintViolations = validator.validate(funcionario);
-        assertEquals(1, constraintViolations.size());
     }
 
     /**
@@ -93,16 +80,6 @@ public class FuncionarioTest {
         Funcionario Funcionario = new Funcionario();
         Set<ConstraintViolation<Funcionario>> restricoes = validator.validate(Funcionario);
         assertThat(restricoes, Matchers.hasSize(0));
-    }
-
-    /**
-     * Deve passar na validacao com cpf nome idade telefone endereco salario informados.
-     */
-    @Test
-    public void deve_passar_na_validacao_com_cpf_nome_idade_telefone_endereco_salario_informados() {
-        funcionario = Fixture.from(Funcionario.class).gimme("valido");
-        Set<ConstraintViolation<Funcionario>> restricoes = validator.validate(funcionario);
-        assertThat(restricoes, empty());
     }
 
     /**
@@ -151,6 +128,14 @@ public class FuncionarioTest {
     @Test
     public void nao_deve_aceitar_salario_nulo() {
         assertNotNull(funcionario.getSalario());
+    }
+    
+    /**
+     * Deve testar o expection salario negativo.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void deve_testar_o_expection_salario_negativo()  {
+    	funcionario.setSalario(BigDecimal.valueOf(-2500.00));
     }
 
     /**
@@ -238,6 +223,8 @@ public class FuncionarioTest {
     @Test(expected = IllegalArgumentException.class)
     public void deve_testar_o_exception_do_setTelefones() {
         Set<Telefone> telefone = new HashSet<>();
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
@@ -469,9 +456,6 @@ public class FuncionarioTest {
      */
     @AfterClass
     public static void tearDownAfterClass() {
-        System.out.println(funcionario);
-        System.out.println("Finalizamos os testes na classe funcionario\n");
-        System.out.println("-----/-----/-----/-----/-----/-----/-----\n");
     }
 
 }

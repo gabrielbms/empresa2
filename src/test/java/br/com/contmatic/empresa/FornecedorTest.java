@@ -8,14 +8,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-
-import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
 import static org.junit.runners.MethodSorters.NAME_ASCENDING;
 
 import java.util.HashSet;
@@ -26,7 +18,14 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import br.com.contmatic.empresa.Fornecedor;
+import org.hamcrest.Matchers;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+
 import br.com.contmatic.endereco.Endereco;
 import br.com.contmatic.telefone.Telefone;
 import br.com.contmatic.util.Annotations;
@@ -51,7 +50,6 @@ public class FornecedorTest {
     @BeforeClass
     public static void setUpBeforeClass() {
         FixtureFactoryLoader.loadTemplates("br.com.contmatic.util");
-        System.out.println("Iniciamos os testes na classe fornecedor");
     }
 
     /**
@@ -187,6 +185,7 @@ public class FornecedorTest {
     @Test(expected = IllegalArgumentException.class)
     public void deve_testar_o_exception_do_setTelefones() {
         Set<Telefone> telefone = new HashSet<>();
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
@@ -408,9 +407,6 @@ public class FornecedorTest {
      */
     @AfterClass
     public static void tearDownAfterClass() {
-        System.out.println(fornecedor);
-        System.out.println("Finalizamos os testes na classe funcionario\n");
-        System.out.println("-----/-----/-----/-----/-----/-----/-----\n");
     }
 
 }

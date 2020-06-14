@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.br.CPF;
 import org.joda.time.LocalDate;
 
@@ -32,7 +33,7 @@ public class Funcionario {
     private String cpf;
 
     /** The nome. */
-    @Size(min = 3, max = 20)
+    @Length(min = 2, max = 60)
     @NotBlank(message = "O campo nome não pode estar nulo")
     @Pattern(regexp = RegexType.LETRAS, message = "O nome do funcionario está incorreto")    
     private String nome;
@@ -54,6 +55,7 @@ public class Funcionario {
 
     /** The salario. */
     @NotBlank(message = "O campo salario não pode estar nulo")
+    @Range(min = 1, message = "O campo salário não pode ser negativo")
     private BigDecimal salario;
 
     /** The data contratacao. */
@@ -104,147 +106,71 @@ public class Funcionario {
 
     }
 
-    /**
-     * Gets the cpf.
-     *
-     * @return the cpf
-     */
     public String getCpf() {
         return cpf;
     }
 
-    /**
-     * Sets the cpf.
-     *
-     * @param cpf the new cpf
-     */
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
-    /**
-     * Gets the nome.
-     *
-     * @return the nome
-     */
     public String getNome() {
         return nome;
     }
 
-    /**
-     * Sets the nome.
-     *
-     * @param nome the new nome
-     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /**
-     * Gets the idade.
-     *
-     * @return the idade
-     */
     public int getIdade() {
         return idade;
     }
 
-    /**
-     * Sets the idade.
-     *
-     * @param idade the new idade
-     */
     public void setIdade(int idade) {
         this.idade = idade;
     }
 
-    /**
-     * Gets the telefone.
-     *
-     * @return the telefone
-     */
     public @Valid Set<Telefone> getTelefone() {
         return telefones;
     }
 
-    /**
-     * Gets the endereco.
-     *
-     * @return the endereco
-     */
     public @Valid Set<Endereco> getEndereco() {
         return enderecos;
     }
 
-    /**
-     * Gets the salario.
-     *
-     * @return the salario
-     */
     public BigDecimal getSalario() {
         return salario;
     }
 
-    /**
-     * Sets the salario.
-     *
-     * @param salario the new salario
-     */
     public void setSalario(BigDecimal salario) {
-        this.salario = salario;
+    	if (salario.doubleValue() >= 1) {
+    		this.salario = salario;
+    	} else {
+    		throw new IllegalArgumentException("salario não pode ser negativo");
+    	}
     }
 
-    /**
-     * Gets the data contratacao.
-     *
-     * @return the data contratacao
-     */
     public LocalDate getDataContratacao() {
         return dataContratacao;
     }
 
-    /**
-     * Sets the data contratacao.
-     *
-     * @param dataPagamento the new data contratacao
-     */
     public void setDataContratacao(LocalDate dataPagamento) {
         this.dataContratacao = dataPagamento;
     }
 
-    /**
-     * Gets the data salario.
-     *
-     * @return the data salario
-     */
     public LocalDate getDataSalario() {
         return dataSalario;
     }
 
-    /**
-     * Sets the data salario.
-     *
-     * @param dataSalario the new data salario
-     */
     public void setDataSalario(LocalDate dataSalario) {
         this.dataSalario = dataSalario;
     }
 
-    /**
-     * Sets the telefones.
-     *
-     * @param telefone the new telefones
-     */
     public void setTelefones(Set<Telefone> telefone) {
         Preconditions.checkArgument(telefone.size() < 2, "Somente pode possuir um telefone");
         this.telefones = telefone;
     }
 
-    /**
-     * Sets the enderecos.
-     *
-     * @param endereco the new enderecos
-     */
     public void setEnderecos(Set<Endereco> endereco) {
         Preconditions.checkArgument(endereco.size() < 2, "Somente pode possuir um endereco");
         this.enderecos = endereco;
@@ -280,4 +206,5 @@ public class Funcionario {
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
+    
 }

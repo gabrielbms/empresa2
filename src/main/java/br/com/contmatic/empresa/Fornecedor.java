@@ -26,14 +26,12 @@ import br.com.contmatic.util.RegexType;
 public class Fornecedor {
 
     /** The cnpj. */
-    @Length(min = 14, max = 14)
     @CNPJ(message = "O CNPJ do funcionario está inválido")
     @NotBlank(message = "O campo CNPJ não pode estar nulo")
-    @Pattern(regexp = "\\d{2}.?\\d{3}.?\\d{3}/?\\d{4}-?\\d{2}")
     private String cnpj;
 
     /** The nome. */
-    @Length(min = 2, max = 40)
+    @Length(min = 2, max = 80, message = "Tamanho do nome invalido")
     @Pattern(regexp = "^[a-zA-Z0-9_ ]*$")
     @NotBlank(message = "O campo nome não pode estar nulo")
     @Pattern(regexp = RegexType.LETRAS, message = "O nome do fornecedor está incorreto")
@@ -45,7 +43,7 @@ public class Fornecedor {
     private Set<Telefone> telefones;
 
     /** The produto. */
-    @Length(min = 2, max = 50)
+    @Length(min = 2, max = 50, message = "Tamanho do produto invalido")
     @NotBlank(message = "O campo produto não pode estar nulo")
     private String produto;
 
@@ -72,93 +70,43 @@ public class Fornecedor {
 
     }
 
-    /**
-     * Gets the cnpj.
-     *
-     * @return the cnpj
-     */
     public String getCnpj() {
         return cnpj;
     }
 
-    /**
-     * Sets the cnpj.
-     *
-     * @param cnpj the new cnpj
-     */
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
 
-    /**
-     * Gets the nome.
-     *
-     * @return the nome
-     */
     public String getNome() {
         return nome;
     }
 
-    /**
-     * Sets the nome.
-     *
-     * @param nome the new nome
-     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /**
-     * Gets the telefone.
-     *
-     * @return the telefone
-     */
     public @Valid Set<Telefone> getTelefone() {
         return telefones;
     }
 
-    /**
-     * Gets the produto.
-     *
-     * @return the produto
-     */
     public String getProduto() {
         return produto;
     }
 
-    /**
-     * Sets the produto.
-     *
-     * @param produto the new produto
-     */
     public void setProduto(String produto) {
         this.produto = produto;
     }
 
-    /**
-     * Gets the endereco.
-     *
-     * @return the endereco
-     */
     public @Valid Set<Endereco> getEndereco() {
         return enderecos;
     }
 
-    /**
-     * Sets the telefones.
-     *
-     * @param telefone the new telefones
-     */
     public void setTelefones(Set<Telefone> telefone) {
         Preconditions.checkArgument(telefone.size() < 2, "Somente pode possuir um telefone");
         this.telefones = telefone;
     }
 
-    /**
-     * Sets the enderecos.
-     *
-     * @param endereco the new enderecos
-     */
     public void setEnderecos(Set<Endereco> endereco) {
         Preconditions.checkArgument(endereco.size() < 2, "Somente pode possuir um endereco");
         this.enderecos = endereco;
