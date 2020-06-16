@@ -27,7 +27,6 @@ import br.com.contmatic.util.RegexType;
 public class Funcionario {
 
     /** The cpf. */
-    @Length(min = 11, max = 11)
     @CPF(message = "O CPF do funcionario está inválido")
     @NotBlank(message = "O campo CPF não pode estar nulo")
     private String cpf;

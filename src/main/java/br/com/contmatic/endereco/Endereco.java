@@ -17,13 +17,13 @@ import br.com.contmatic.util.RegexType;
 public class Endereco {
 
     /** The cep. */
-    @Size(min = 8, max = 9)
+    @Size(min = 8, max = 8)
     @NotBlank(message = "O campo CEP não pode estar nulo")
     @Pattern(regexp = RegexType.CEP, message = "O CEP do endereco está incorreto")
     private String cep;
 
     /** The rua. */
-    @Size(min = 3, max = 60)
+    @Size(min = 2, max = 80)
     @NotBlank(message = "O campo rua não pode estar nulo")
     @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "A rua do endereço está incorreto")
     private String rua;
@@ -33,19 +33,19 @@ public class Endereco {
     private Integer numero;
 
     /** The complemento. */
-    @Size(min = 2, max = 60)
+    @Size(min = 2, max = 80)
     @NotBlank(message = "O campo complemento não pode estar nulo")
     @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "A rua do endereço está incorreto")
     private String complemento;
 
     /** The bairro. */
-    @Size(min = 3, max = 30)
+    @Size(min = 2, max = 40)
     @NotBlank(message = "O campo bairro não pode estar nulo")
     @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "A rua do endereço está incorreto")
     private String bairro;
 
     /** The cidade. */
-    @Size(min = 3, max = 25)
+    @Size(min = 2, max = 40)
     @NotBlank(message = "O campo cidade não pode estar nulo")
     @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "A rua do endereço está incorreto")
     private String cidade;
@@ -92,128 +92,58 @@ public class Endereco {
         this.estado = estado;
     }
 
-    /**
-     * Gets the cep.
-     *
-     * @return the cep
-     */
     public String getCep() {
         return cep;
     }
 
-    /**
-     * Sets the cep.
-     *
-     * @param cep the new cep
-     */
     public void setCep(String cep) {
         this.cep = cep;
     }
 
-    /**
-     * Gets the rua.
-     *
-     * @return the rua
-     */
     public String getRua() {
         return rua;
     }
 
-    /**
-     * Sets the rua.
-     *
-     * @param rua the new rua
-     */
     public void setRua(String rua) {
         this.rua = rua;
     }
 
-    /**
-     * Gets the numero.
-     *
-     * @return the numero
-     */
     public int getNumero() {
         return numero;
     }
 
-    /**
-     * Sets the numero.
-     *
-     * @param numero the new numero
-     */
     public void setNumero(Integer numero) {
         this.numero = numero;
     }
 
-    /**
-     * Gets the complemento.
-     *
-     * @return the complemento
-     */
     public String getComplemento() {
         return complemento;
     }
 
-    /**
-     * Sets the complemento.
-     *
-     * @param complemento the new complemento
-     */
     public void setComplemento(String complemento) {
         this.complemento = complemento;
     }
 
-    /**
-     * Gets the bairro.
-     *
-     * @return the bairro
-     */
     public String getBairro() {
         return bairro;
     }
 
-    /**
-     * Sets the bairro.
-     *
-     * @param bairro the new bairro
-     */
     public void setBairro(String bairro) {
         this.bairro = bairro;
     }
 
-    /**
-     * Gets the cidade.
-     *
-     * @return the cidade
-     */
     public String getCidade() {
         return cidade;
     }
 
-    /**
-     * Sets the cidade.
-     *
-     * @param cidade the new cidade
-     */
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
 
-    /**
-     * Gets the estado.
-     *
-     * @return the estado
-     */
     public Estado getEstado() {
         return estado;
     }
 
-    /**
-     * Sets the estado.
-     *
-     * @param estado the new estado
-     */
     public void setEstado(Estado estado) {
         this.estado = estado;
     }

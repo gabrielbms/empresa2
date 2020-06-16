@@ -63,26 +63,6 @@ public class FuncionarioTest {
     }
 
     /**
-     * Nao deve aceitar nome curto.
-     */
-    @Test
-    public void nao_deve_aceitar_nome_curto() {
-        Funcionario funcionario = new Funcionario();
-        funcionario.setNome("Gabriel");
-        assertTrue(funcionario.getNome().equals("Gabriel"));
-    }
-
-    /**
-     * Nao deve aceitar funcionario sem cpf nome idade telefone endereco salario.
-     */
-    @Test
-    public void nao_deve_aceitar_Funcionario_sem_cpf_nome_idade_telefone_endereco_salario() {
-        Funcionario Funcionario = new Funcionario();
-        Set<ConstraintViolation<Funcionario>> restricoes = validator.validate(Funcionario);
-        assertThat(restricoes, Matchers.hasSize(0));
-    }
-
-    /**
      * Nao deve aceitar cpf nulo.
      */
     @Test
@@ -152,6 +132,26 @@ public class FuncionarioTest {
     @Test
     public void nao_deve_aceitar_data_salario_nulo() {
         assertNotNull(funcionario.getDataSalario());
+    }
+    
+    /**
+     * Nao deve aceitar nome curto.
+     */
+    @Test
+    public void nao_deve_aceitar_nome_curto() {
+        Funcionario funcionario = new Funcionario();
+        funcionario.setNome("Gabriel");
+        assertTrue(funcionario.getNome().equals("Gabriel"));
+    }
+
+    /**
+     * Nao deve aceitar funcionario sem cpf nome idade telefone endereco salario.
+     */
+    @Test
+    public void nao_deve_aceitar_Funcionario_sem_cpf_nome_idade_telefone_endereco_salario() {
+        Funcionario Funcionario = new Funcionario();
+        Set<ConstraintViolation<Funcionario>> restricoes = validator.validate(Funcionario);
+        assertThat(restricoes, Matchers.hasSize(0));
     }
     
     /**
@@ -448,7 +448,6 @@ public class FuncionarioTest {
      */
     @After
     public void tearDown() {
-
     }
 
     /**

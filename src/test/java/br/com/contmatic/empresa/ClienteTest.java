@@ -37,7 +37,7 @@ import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
  */
 @FixMethodOrder(NAME_ASCENDING)
 public class ClienteTest {
-
+	
     /** The cliente. */
     private static Cliente cliente;
 
@@ -60,46 +60,6 @@ public class ClienteTest {
         cliente = Fixture.from(Cliente.class).gimme("valido");
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         this.validator = factory.getValidator();
-    }
-
-    /**
-     * Deve gerar dados validos.
-     */
-    @Test
-    public void deve_gerar_dados_validos() {
-        Set<ConstraintViolation<Cliente>> constraintViolations = validator.validate(cliente);
-        assertEquals(0, constraintViolations.size());
-    }
-
-    /**
-     * Nao deve aceitar nome curto.
-     */
-    @Test
-    public void nao_deve_aceitar_nome_curto() {
-        Cliente cliente = new Cliente();
-        cliente.setNome("Gabriel");
-        Set<ConstraintViolation<Cliente>> violations = validator.validate(cliente);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Nao deve aceitar cliente sem cpf nome telefone boleto.
-     */
-    @Test
-    public void nao_deve_aceitar_cliente_sem_cpf_nome_telefone_boleto() {
-        Cliente cliente = new Cliente();
-        Set<ConstraintViolation<Cliente>> restricoes = validator.validate(cliente);
-        assertThat(restricoes, Matchers.hasSize(3));
-    }
-
-    /**
-     * Deve passar na validacao com cpf nome telefone boleto informados.
-     */
-    @Test
-    public void deve_passar_na_validacao_com_cpf_nome_telefone_boleto_informados() {
-        cliente = Fixture.from(Cliente.class).gimme("valido");
-        Set<ConstraintViolation<Cliente>> restricoes = validator.validate(cliente);
-        assertThat(restricoes, empty());
     }
 
     /**
@@ -186,31 +146,6 @@ public class ClienteTest {
     public void deve_testar_o_setBoleto_esta_funcionando_corretamente() {
         cliente.setBoleto(BigDecimal.valueOf(250.00));
         assertThat(cliente.getBoleto(), is(BigDecimal.valueOf(250.00)));
-    }
-
-    /**
-     * Deve testar o exception do set telefones.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void deve_testar_o_exception_do_setTelefones() {
-        Set<Telefone> telefone = new HashSet<>();
-        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
-        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
-        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
-        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
-        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
-        cliente.setTelefones(telefone);
-    }
-
-    /**
-     * Deve testar o set telefones.
-     */
-    @Test
-    public void deve_testar_o_setTelefones() {
-        Set<Telefone> telefone = new HashSet<>();
-        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
-        cliente.setTelefones(telefone);
-        assertTrue(cliente.equals(cliente));
     }
 
     /**
@@ -305,8 +240,8 @@ public class ClienteTest {
      */
     @Test
     public void toString_deve_retornar_null() {
-        Cliente clienteNull = new Cliente(null, null, null, new BigDecimal("0"));
-        assertThat(clienteNull.toString(), containsString("boleto"));
+        Cliente clienteNull = new Cliente(null, null, null, null);
+        assertThat(clienteNull.toString(), containsString("null"));
     }
 
     /**
@@ -361,6 +296,71 @@ public class ClienteTest {
     public void deve_validar_boletos_annotations() {
         Cliente cadastroValidator = Fixture.from(Cliente.class).gimme("valido");
         assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getBoleto()));
+    }
+    
+    /**
+     * Deve gerar dados validos.
+     */
+    @Test
+    public void deve_gerar_dados_validos() {
+        Set<ConstraintViolation<Cliente>> constraintViolations = validator.validate(cliente);
+        assertEquals(0, constraintViolations.size());
+    }
+
+    /**
+     * Nao deve aceitar nome curto.
+     */
+    @Test
+    public void nao_deve_aceitar_nome_curto() {
+        Cliente cliente = new Cliente();
+        cliente.setNome("Gabriel");
+        Set<ConstraintViolation<Cliente>> violations = validator.validate(cliente);
+        assertFalse(violations.isEmpty());
+    }
+
+    /**
+     * Nao deve aceitar cliente sem cpf nome telefone boleto.
+     */
+    @Test
+    public void nao_deve_aceitar_cliente_sem_cpf_nome_telefone_boleto() {
+        Cliente cliente = new Cliente();
+        Set<ConstraintViolation<Cliente>> restricoes = validator.validate(cliente);
+        assertThat(restricoes, Matchers.hasSize(3));
+    }
+
+    /**
+     * Deve passar na validacao com cpf nome telefone boleto informados.
+     */
+    @Test
+    public void deve_passar_na_validacao_com_cpf_nome_telefone_boleto_informados() {
+        cliente = Fixture.from(Cliente.class).gimme("valido");
+        Set<ConstraintViolation<Cliente>> restricoes = validator.validate(cliente);
+        assertThat(restricoes, empty());
+    }
+    
+    /**
+     * Deve testar o exception do set telefones.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void deve_testar_o_exception_do_setTelefones() {
+        Set<Telefone> telefone = new HashSet<>();
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
+        cliente.setTelefones(telefone);
+    }
+    
+    /**
+     * Deve testar o set telefones.
+     */
+    @Test
+    public void deve_testar_o_setTelefones() {
+        Set<Telefone> telefone = new HashSet<>();
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
+        cliente.setTelefones(telefone);
+        assertTrue(cliente.equals(cliente));
     }
 
     /**

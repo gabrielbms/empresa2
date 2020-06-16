@@ -32,7 +32,6 @@ public class Fornecedor {
 
     /** The nome. */
     @Length(min = 2, max = 80, message = "Tamanho do nome invalido")
-    @Pattern(regexp = "^[a-zA-Z0-9_ ]*$")
     @NotBlank(message = "O campo nome não pode estar nulo")
     @Pattern(regexp = RegexType.LETRAS, message = "O nome do fornecedor está incorreto")
     private String nome;

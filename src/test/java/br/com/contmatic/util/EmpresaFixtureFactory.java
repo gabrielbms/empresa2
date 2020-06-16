@@ -74,7 +74,7 @@ public class EmpresaFixtureFactory implements TemplateLoader {
 
         Fixture.of(Endereco.class).addTemplate("valido", new Rule() {
             {
-                add("cep", random("08121-019", "04570-050", "02243-140", "02243-140"));
+                add("cep", random("08121019", "04570050", "02243140", "02243140"));
                 add("rua", random("Rua Padre Estevão Pernet", "Av Conselheiro Carrão"));
                 add("numero", random(02, 05, 10, 15, 20));
                 add("complemento", random("Apartamento", "SN"));

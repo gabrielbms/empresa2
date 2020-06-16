@@ -4,19 +4,21 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.br.CPF;
 
 import com.google.common.base.Preconditions;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import br.com.contmatic.telefone.Telefone;
 import br.com.contmatic.util.RegexType;
@@ -27,8 +29,8 @@ import br.com.contmatic.util.RegexType;
 public class Cliente {
 
     /** The cpf. */
-    @Length(min = 11, max = 11)
-    @CPF(message = "O CPF do funcionario está inválido")
+    //@Length(min = 11, max = 11)
+    @CPF(message = "O CPF do cliente está inválido")
     @NotNull(message = "O campo CPF não pode estar nulo")
     private String cpf;
 
@@ -50,7 +52,7 @@ public class Cliente {
     private Set<Telefone> telefones;
 
     /** The boleto. */
-    @Range(min = 1, max = 9999)
+    @Range(min = 1, max = 9999999)
     @NotEmpty(message = "O campo boleto não pode estar nulo")    
     private BigDecimal boleto;
 

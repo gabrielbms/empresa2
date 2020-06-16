@@ -50,38 +50,18 @@ public class Telefone {
         this.tipoTelefone = telefone;
     }
 
-    /**
-     * Gets the ddd.
-     *
-     * @return the ddd
-     */
     public TelefoneDDD getDdd() {
         return ddd;
     }
 
-    /**
-     * Gets the numero.
-     *
-     * @return the numero
-     */
     public String getNumero() {
         return numero;
     }
 
-    /**
-     * Sets the numero.
-     *
-     * @param numero the new numero
-     */
     public void setNumero(String numero) {
             this.numero = numero;
     }
 
-    /**
-     * Gets the telefone.
-     *
-     * @return the telefone
-     */
     public TipoTelefone getTelefone() {
         return tipoTelefone;
     }
