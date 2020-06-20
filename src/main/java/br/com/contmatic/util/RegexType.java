@@ -12,7 +12,10 @@ public final class RegexType {
     public static final String CEP = "^[[0-9]{5}-[\\\\d]{3}]+$";
     
     /** The Constant NOME. */
-    public static final String LETRAS = "^[a-zà-úA-ZÀ-Ú_ ]*$";
+	public static final String NOME = "(\\w|\\s|ç|[á-ú])+";
+	
+	/** The Constant EMAIL. */
+	public static final String EMAIL = "[\\w-]+@([\\w-]+\\.)+[\\w-]+";
     
     /** The Constant ENDERECO. */
     public static final String LETRAS_NUMEROS = "^[A-Za-záÁ-úÚÇÑ0-9_ '\\\\s]+$";

@@ -49,6 +49,10 @@ public class Telefone {
         this.numero = numero;
         this.tipoTelefone = telefone;
     }
+    
+    public void setDdd(TelefoneDDD ddd) {
+		this.ddd = ddd;
+	}
 
     public TelefoneDDD getDdd() {
         return ddd;

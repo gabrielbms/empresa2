@@ -4,6 +4,8 @@ import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
@@ -22,6 +24,8 @@ import br.com.contmatic.util.RegexType;
 
 /**
  * The Class Empresa.
+ * 
+ * @author gabriel.santos
  */
 public class Empresa {
 
@@ -31,9 +35,9 @@ public class Empresa {
     private String cnpj;
 
     /** The nome. */
-    @Length(min = 2, max = 80)
-    @NotBlank(message = "O campo nome não pode estar nulo")
-    @Pattern(regexp = RegexType.LETRAS, message = "O nome da empresa está incorreto")
+    @NotBlank(message = "O campo nome não pode estar vazio")
+    @Pattern(regexp = RegexType.NOME, message = "O nome da empresa está incorreto")
+    @Size(min = 2, max = 100, message = "O nome mínimo é de {min} caracteres e no máximo de {max} caracteres")
     private String nome;
 
     /** The site. */
@@ -44,12 +48,16 @@ public class Empresa {
 
     /** The telefones. */
     @Valid
-    @NotEmpty
+    @NotEmpty(message = "O telefone da empresa não pode ser vazio")
+    @Size.List({ @Size(min = 1, message = "os telefones da empresa não devem ser menor que um"),
+		@Size(max = 3, message = "O máximo de telefones que podem ser salvo totaliza {max} telefones") })
     private Set<Telefone> telefones;
 
     /** The enderecos. */
     @Valid
-    @NotEmpty
+    @NotEmpty(message = "O endereço da empresa está vazio")
+	@Size.List({ @Size(min = 1, message = "Tem que cadastrar pelo menos um endereço"),
+			@Size(max = 3, message = "A quantidade máxima de endeços é {max} endereços") })
     private Set<Endereco> enderecos;
 
     /**
@@ -146,4 +154,5 @@ public class Empresa {
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
+    
 }

@@ -34,7 +34,7 @@ public class EmpresaFixtureFactory implements TemplateLoader {
                 add("nome", random("Gabriel", "Bueno", "Santos"));
                 add("email", random("gabriel@hotmail.com", "bueno@gmail.com", "julia@bol.com.br"));
                 add("telefones", has(1).of(Telefone.class, "valido"));
-                add("boleto", BigDecimal.valueOf(2500.00));
+                add("boleto", BigDecimal.valueOf(200.00));
             }
         });
 
