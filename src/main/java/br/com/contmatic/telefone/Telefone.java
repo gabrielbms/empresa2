@@ -17,17 +17,17 @@ import br.com.contmatic.util.RegexType;
 public class Telefone {
 
     /** The ddd. */
-    @NotBlank(message = "O campo DDD não pode estar nulo")
+    @NotBlank(message = "O campo DDD do telefone não pode estar nulo")
     private TelefoneDDD ddd;
   
     /** The numero. */
     @Size(min = 8, max = 10)
-    @NotBlank(message = "O campo número não pode estar nulo")
-    @Pattern(regexp = RegexType.NUMEROS, message = "O campo Numero não pode estar invalido")
+    @NotBlank(message = "O campo número do telefone não pode estar nulo")
+    @Pattern(regexp = RegexType.NUMEROS, message = "O campo Numero está invalido")
     private String numero;
     
     /** The tipo telefone. */
-    @NotBlank(message = "O campo telefone não pode estar nulo")
+    @NotBlank(message = "O campo tipo do telefone não pode estar nulo")
     private TipoTelefone tipoTelefone;
     
     /**
@@ -49,10 +49,6 @@ public class Telefone {
         this.numero = numero;
         this.tipoTelefone = telefone;
     }
-    
-    public void setDdd(TelefoneDDD ddd) {
-		this.ddd = ddd;
-	}
 
     public TelefoneDDD getDdd() {
         return ddd;

@@ -21,7 +21,7 @@ public final class RegexType {
     public static final String LETRAS_NUMEROS = "^[A-Za-záÁ-úÚÇÑ0-9_ '\\\\s]+$";
     
     /** The Constant NUMERO. */
-    public static final String NUMEROS = "^[0-9_ ]*$";
+    public static final String NUMEROS = "^[0-9]*";
 
     /**
      * Instantiates a new regex type.
