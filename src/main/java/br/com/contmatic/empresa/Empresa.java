@@ -1,22 +1,20 @@
 package br.com.contmatic.empresa;
 
 import java.util.Set;
+
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.URL;
-import org.hibernate.validator.constraints.br.CNPJ;
-
-import com.google.common.base.Preconditions;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.URL;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 import br.com.contmatic.endereco.Endereco;
 import br.com.contmatic.telefone.Telefone;
@@ -44,18 +42,19 @@ public class Empresa {
     @URL
     @Length(min = 5, max = 60)
     @NotBlank(message = "O campo site não pode estar nulo")
+    @Pattern(regexp = RegexType.URL, message = "O site da empresa está inválido")
     private String site;
 
     /** The telefones. */
     @Valid
-    @NotEmpty(message = "O telefone da empresa não pode ser vazio")
+    @NotNull(message = "O telefone da empresa não pode ser nulo")
     @Size.List({ @Size(min = 1, message = "os telefones da empresa não devem ser menor que um"),
 		@Size(max = 3, message = "O máximo de telefones que podem ser salvo totaliza {max} telefones") })
     private Set<Telefone> telefones;
 
     /** The enderecos. */
     @Valid
-    @NotEmpty(message = "O endereço da empresa está vazio")
+    @NotNull(message = "O endereço da empresa está vazio")
 	@Size.List({ @Size(min = 1, message = "Tem que cadastrar pelo menos um endereço"),
 			@Size(max = 3, message = "A quantidade máxima de endeços é {max} endereços") })
     private Set<Endereco> enderecos;
@@ -115,12 +114,10 @@ public class Empresa {
     }
 
     public void setTelefones(Set<Telefone> telefone) {
-        Preconditions.checkArgument(telefone.size() < 2, "Somente pode possuir um telefone");
-        this.telefones = telefone;
+       this.telefones = telefone;
     }
 
     public void setEnderecos(Set<Endereco> endereco) {
-        Preconditions.checkArgument(endereco.size() < 2, "Somente pode possuir um endereco");
         this.enderecos = endereco;
     }
 

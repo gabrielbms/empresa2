@@ -6,7 +6,7 @@ package br.com.contmatic.util;
 public final class RegexType {
 
     /** The Constant URL. */
-    public static final String URL = "^(https?|http|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+    public static final String URL = "^(https?|http|ftp|file)://[-a-zA-Z0-9+_|!:,.;]*[-a-zA-Z0-9+_|]";
     
     /** The Constant CEP. */
     public static final String CEP = "^[[0-9]{5}-[\\\\d]{3}]+$";

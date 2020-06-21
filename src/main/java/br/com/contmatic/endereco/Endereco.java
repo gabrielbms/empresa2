@@ -17,9 +17,8 @@ import br.com.contmatic.util.RegexType;
 public class Endereco {
 
     /** The cep. */
-    @Size(min = 8, max = 8)
-    @NotBlank(message = "O campo CEP não pode estar nulo")
-    @Pattern(regexp = RegexType.CEP, message = "O CEP do endereco está incorreto")
+	@NotBlank(message = "O campo cep não pode estar nulo")
+	@Pattern(regexp = RegexType.CEP, message = "O CEP do endereço está incorreto")
     private String cep;
 
     /** The rua. */
@@ -30,24 +29,24 @@ public class Endereco {
 
     /** The numero. */
     @NotBlank(message = "O campo numero não pode estar nulo")
-    private Integer numero;
+    private int numero;
 
     /** The complemento. */
     @Size(min = 2, max = 80)
     @NotBlank(message = "O campo complemento não pode estar nulo")
-    @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "A rua do endereço está incorreto")
+    @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "O complemento do endereço está incorreto")
     private String complemento;
 
     /** The bairro. */
     @Size(min = 2, max = 40)
     @NotBlank(message = "O campo bairro não pode estar nulo")
-    @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "A rua do endereço está incorreto")
+    @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "O bairro do endereço está incorreto")
     private String bairro;
 
     /** The cidade. */
     @Size(min = 2, max = 40)
     @NotBlank(message = "O campo cidade não pode estar nulo")
-    @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "A rua do endereço está incorreto")
+    @Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "A cidade do endereço está incorreto")
     private String cidade;
 
     /** The estado. */

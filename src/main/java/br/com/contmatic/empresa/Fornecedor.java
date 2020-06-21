@@ -40,17 +40,18 @@ public class Fornecedor {
     @Size(min = 2, max = 100, message = "O nome mínimo é de {min} caracteres e no máximo de {max} caracteres")
     private String nome;
 
+    /** The produto. */
+    @NotBlank(message = "O campo produto não pode estar nulo")
+    @Length(min = 2, max = 80, message = "Tamanho do produto invalido")
+    @Pattern(regexp = RegexType.NOME, message = "O nome do produto está incorreto")
+    private String produto;
+    
     /** The telefones. */
     @Valid
     @NotEmpty(message = "O telefone do fornecedor não pode ser vazio")
     @Size.List({ @Size(min = 1, message = "os telefones do fornecedor não devem ser menor que um"),
 		@Size(max = 3, message = "O máximo de telefones que podem ser salvo totaliza {max} telefones") })
     private Set<Telefone> telefones;
-
-    /** The produto. */
-    @Length(min = 2, max = 80, message = "Tamanho do produto invalido")
-    @NotBlank(message = "O campo produto não pode estar nulo")
-    private String produto;
 
     /** The enderecos. */
     @Valid
@@ -92,17 +93,17 @@ public class Fornecedor {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
-    public @Valid Set<Telefone> getTelefone() {
-        return telefones;
-    }
-
+    
     public String getProduto() {
         return produto;
     }
 
     public void setProduto(String produto) {
         this.produto = produto;
+    }
+
+    public @Valid Set<Telefone> getTelefone() {
+        return telefones;
     }
 
     public @Valid Set<Endereco> getEndereco() {

@@ -44,6 +44,7 @@ public class FuncionarioTest {
     /** The validator. */
     private Validator validator;
     
+    /** The factory. */
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
     /**
@@ -306,15 +307,6 @@ public class FuncionarioTest {
     public void deve_validar_endereco_annotations() {
         Funcionario cadastroValidator = Fixture.from(Funcionario.class).gimme("valido");
         assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getEndereco()));
-    }
-    
-    /**
-     * Deve testar o get telefone esta funcionando corretamente.
-     */
-    @Test
-    public void deve_testar_o_setTelefone_esta_funcionando_corretamente() {
-        funcionario = Fixture.from(Funcionario.class).gimme("valido");
-        assertTrue(funcionario.equals(funcionario));
     }
 	
     /* TESTES NO SALARIO */
