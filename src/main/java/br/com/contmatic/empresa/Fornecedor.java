@@ -5,6 +5,8 @@ import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CNPJ;
@@ -22,36 +24,40 @@ import br.com.contmatic.util.RegexType;
 
 /**
  * The Class Fornecedor.
+ * 
+ * @author gabriel.santos
  */
 public class Fornecedor {
 
     /** The cnpj. */
-    @Length(min = 17, max = 19)
     @CNPJ(message = "O CNPJ do funcionario está inválido")
     @NotBlank(message = "O campo CNPJ não pode estar nulo")
-    @Pattern(regexp = "\\d{2}.?\\d{3}.?\\d{3}/?\\d{4}-?\\d{2}")
     private String cnpj;
 
     /** The nome. */
-    @Length(min = 2, max = 40)
-    @Pattern(regexp = "^[a-zA-Z0-9_ ]*$")
-    @NotBlank(message = "O campo nome não pode estar nulo")
-    @Pattern(regexp = RegexType.LETRAS, message = "O nome do fornecedor está incorreto")
+    @NotBlank(message = "O campo nome não pode estar vazio")
+    @Pattern(regexp = RegexType.NOME, message = "O nome do fornecedor está incorreto")
+    @Size(min = 2, max = 100, message = "O nome mínimo é de {min} caracteres e no máximo de {max} caracteres")
     private String nome;
 
+    /** The produto. */
+    @NotBlank(message = "O campo produto não pode estar nulo")
+    @Length(min = 2, max = 80, message = "Tamanho do produto invalido")
+    @Pattern(regexp = RegexType.NOME, message = "O nome do produto está incorreto")
+    private String produto;
+    
     /** The telefones. */
     @Valid
-    @NotEmpty(message = "O campo telefone não pode estar nulo")
+    @NotEmpty(message = "O telefone do fornecedor não pode ser vazio")
+    @Size.List({ @Size(min = 1, message = "os telefones do fornecedor não devem ser menor que um"),
+		@Size(max = 3, message = "O máximo de telefones que podem ser salvo totaliza {max} telefones") })
     private Set<Telefone> telefones;
-
-    /** The produto. */
-    @Length(min = 2, max = 50)
-    @NotBlank(message = "O campo produto não pode estar nulo")
-    private String produto;
 
     /** The enderecos. */
     @Valid
-    @NotEmpty(message = "O campo endereco não pode estar nulo")
+    @NotEmpty(message = "O endereço da empresa está vazio")
+	@Size.List({ @Size(min = 1, message = "Tem que cadastrar pelo menos um endereço"),
+			@Size(max = 3, message = "A quantidade máxima de endeços é {max} endereços") })
     private Set<Endereco> enderecos;
 
     /**
@@ -72,93 +78,43 @@ public class Fornecedor {
 
     }
 
-    /**
-     * Gets the cnpj.
-     *
-     * @return the cnpj
-     */
     public String getCnpj() {
         return cnpj;
     }
 
-    /**
-     * Sets the cnpj.
-     *
-     * @param cnpj the new cnpj
-     */
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
 
-    /**
-     * Gets the nome.
-     *
-     * @return the nome
-     */
     public String getNome() {
         return nome;
     }
 
-    /**
-     * Sets the nome.
-     *
-     * @param nome the new nome
-     */
     public void setNome(String nome) {
         this.nome = nome;
     }
-
-    /**
-     * Gets the telefone.
-     *
-     * @return the telefone
-     */
-    public @Valid Set<Telefone> getTelefone() {
-        return telefones;
-    }
-
-    /**
-     * Gets the produto.
-     *
-     * @return the produto
-     */
+    
     public String getProduto() {
         return produto;
     }
 
-    /**
-     * Sets the produto.
-     *
-     * @param produto the new produto
-     */
     public void setProduto(String produto) {
         this.produto = produto;
     }
 
-    /**
-     * Gets the endereco.
-     *
-     * @return the endereco
-     */
+    public @Valid Set<Telefone> getTelefone() {
+        return telefones;
+    }
+
     public @Valid Set<Endereco> getEndereco() {
         return enderecos;
     }
 
-    /**
-     * Sets the telefones.
-     *
-     * @param telefone the new telefones
-     */
     public void setTelefones(Set<Telefone> telefone) {
         Preconditions.checkArgument(telefone.size() < 2, "Somente pode possuir um telefone");
         this.telefones = telefone;
     }
 
-    /**
-     * Sets the enderecos.
-     *
-     * @param endereco the new enderecos
-     */
     public void setEnderecos(Set<Endereco> endereco) {
         Preconditions.checkArgument(endereco.size() < 2, "Somente pode possuir um endereco");
         this.enderecos = endereco;

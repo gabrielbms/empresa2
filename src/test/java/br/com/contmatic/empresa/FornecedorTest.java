@@ -8,14 +8,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-
-import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
 import static org.junit.runners.MethodSorters.NAME_ASCENDING;
 
 import java.util.HashSet;
@@ -26,7 +18,14 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import br.com.contmatic.empresa.Fornecedor;
+import org.hamcrest.Matchers;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+
 import br.com.contmatic.endereco.Endereco;
 import br.com.contmatic.telefone.Telefone;
 import br.com.contmatic.util.Annotations;
@@ -44,6 +43,10 @@ public class FornecedorTest {
     
     /** The validator. */
     private Validator validator;
+    
+    /** The factory. */
+    private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+
 
     /**
      * Set up before class.
@@ -51,7 +54,6 @@ public class FornecedorTest {
     @BeforeClass
     public static void setUpBeforeClass() {
         FixtureFactoryLoader.loadTemplates("br.com.contmatic.util");
-        System.out.println("Iniciamos os testes na classe fornecedor");
     }
 
     /**
@@ -63,16 +65,73 @@ public class FornecedorTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         this.validator = factory.getValidator();
     }
-
+    
+    public boolean isValid(Fornecedor fornecedor, String mensagem) {
+		validator = factory.getValidator();
+		boolean valido = true;
+		Set<ConstraintViolation<Fornecedor>> restricoes = validator.validate(fornecedor);
+		for (ConstraintViolation<Fornecedor> constraintViolation : restricoes)
+			if (constraintViolation.getMessage().equalsIgnoreCase(mensagem))
+				valido = false;
+		return valido;
+	}
+    
+    /* TESTES NO CNPJ */
+    
     /**
-     * Deve gerar dados validos.
+     * Nao deve aceitar cnpj nulo.
      */
     @Test
-    public void deve_gerar_dados_validos() {
-        Set<ConstraintViolation<Fornecedor>> constraintViolations = validator.validate(fornecedor);
-        assertEquals(0, constraintViolations.size());
+    public void nao_deve_aceitar_cnpj_nulo() {
+        assertNotNull(fornecedor.getCnpj());
     }
-
+    
+    /**
+     * Deve testar o get cnpj esta funcionando corretamente.
+     */
+    @Test
+    public void deve_testar_o_getCpf_esta_funcionando_corretamente() {
+        fornecedor.setCnpj("97904702000131");
+        assertThat(fornecedor.getCnpj(), containsString("97904702000131"));
+    }    
+    
+    /**
+     * Nao deve aceitar espacos em branco no cnpj.
+     */
+    @Test
+    public void nao_deve_aceitar_espacos_em_branco_no_cnpj() {
+        assertFalse(fornecedor.getCnpj().trim().isEmpty());
+    }
+    
+    /**
+     * Deve validar cnpj annotations.
+     */
+    @Test
+    public void deve_validar_cnpj_annotations() {
+        Fornecedor cadastroValidator = Fixture.from(Fornecedor.class).gimme("valido");
+        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getCnpj()));
+    }
+    
+    /* TESTES NO NOME */
+    
+    /**
+     * Nao deve aceitar nome nulo.
+     */
+    @Test //
+    public void nao_deve_aceitar_nome_nulo() {
+        fornecedor.setNome("CA peças LTDA");
+        assertNotNull(fornecedor.getNome());
+    }
+    
+    /**
+     * Deve testar o get nome esta funcionando corretamente.
+     */
+    @Test
+    public void deve_testar_o_getNome_esta_funcionando_corretamente() {
+        fornecedor.setNome("CA peças LTDA");
+        assertThat(fornecedor.getNome(), containsString("CA peças LTDA"));
+    }
+    
     /**
      * Nao deve aceitar nome curto.
      */
@@ -83,60 +142,62 @@ public class FornecedorTest {
         Set<ConstraintViolation<Fornecedor>> violations = validator.validate(fornecedor);
         assertFalse(violations.isEmpty());
     }
-
+    
+    @Test
+	public void deve_aceitar_nome_valido() {
+    	fornecedor.setNome("Gabriel");
+		assertTrue(isValid(fornecedor, "O campo nome não pode estar vazio"));
+	}
+    
     /**
-     * Nao deve aceitar fornecedor sem cnpj nome telefone produto endereco.
+     * Nao deve aceitar espacos em branco no nome.
      */
     @Test
-    public void nao_deve_aceitar_Fornecedor_sem_cnpj_nome_telefone_produto_endereco() {
-        Fornecedor Fornecedor = new Fornecedor();
-        Set<ConstraintViolation<Fornecedor>> restricoes = validator.validate(Fornecedor);
-        assertThat(restricoes, Matchers.hasSize(3));
+    public void nao_deve_aceitar_espacos_em_branco_no_nome() {
+        assertFalse(fornecedor.getNome().trim().isEmpty());
     }
+    
+	@Test
+	public void deve_aceitar_nome_sem_espaco() {
+		fornecedor.setNome("GabrielBueno");
+		assertTrue(isValid(fornecedor, "O nome do fornecedor está incorreto"));
+	}
 
+	@Test
+	public void deve_aceitar_nome_com_acento() {
+		fornecedor.setNome("João");
+		assertTrue(isValid(fornecedor, "O nome do fornecedor está incorreto"));
+	}
+
+	@Test
+	public void deve_aceitar_nome_com_cedilha() {
+		fornecedor.setNome("Maria Conceição");
+		assertTrue(isValid(fornecedor, "O nome do fornecedor está incorreto"));
+	}
+
+	@Test
+	public void deve_aceitar_nome_com_espaco() {
+		fornecedor.setNome("Gabriel Bueno");
+		assertTrue(isValid(fornecedor, "O nome do fornecedor está incorreto"));
+	}
+
+	@Test
+	public void nao_deve_aceitar_nome_com_arroba() {
+		fornecedor.setNome("G@briel");
+		assertFalse(isValid(fornecedor, "O nome do fornecedor está incorreto"));
+	}
+    
     /**
-     * Deve passar na validacao com cnpj nome telefone produto endereco informados.
+     * Deve validar nome annotations.
      */
     @Test
-    public void deve_passar_na_validacao_com_cnpj_nome_telefone_produto_endereco_informados() {
-        fornecedor = Fixture.from(Fornecedor.class).gimme("valido");
-        Set<ConstraintViolation<Fornecedor>> restricoes = validator.validate(fornecedor);
-        assertThat(restricoes, empty());
+    public void deve_validar_nome_annotations() {
+        Fornecedor cadastroValidator = Fixture.from(Fornecedor.class).gimme("valido");
+        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getNome()));
     }
-
-    /**
-     * Nao deve aceitar cnpj nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_cnpj_nulo() {
-        assertNotNull(fornecedor.getCnpj());
-    }
-
-    /**
-     * Nao deve aceitar nome nulo.
-     */
-    @Test //
-    public void nao_deve_aceitar_nome_nulo() {
-        fornecedor.setNome("CA peças LTDA");
-        assertNotNull(fornecedor.getNome());
-    }
-
-    /**
-     * Nao deve aceitar telefone nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_telefone_nulo() {
-        assertNotNull(fornecedor.getTelefone());
-    }
-
-    /**
-     * Nao deve aceitar endereco nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_endereco_nulo() {
-        assertNotNull(fornecedor.getEndereco());
-    }
-
+    
+    /* TESTES NO PRODUTO */
+    
     /**
      * Nao deve aceitar produto nulo.
      */
@@ -144,34 +205,7 @@ public class FornecedorTest {
     public void nao_deve_aceitar_produto_nulo() {
         assertNotNull(fornecedor.getProduto());
     }
-
-    /**
-     * Deve testar o get cpf esta funcionando corretamente.
-     */
-    @Test
-    public void deve_testar_o_getCpf_esta_funcionando_corretamente() {
-        fornecedor.setCnpj("97904702000131");
-        assertThat(fornecedor.getCnpj(), containsString("97904702000131"));
-    }
-
-    /**
-     * Deve testar o get nome esta funcionando corretamente.
-     */
-    @Test
-    public void deve_testar_o_getNome_esta_funcionando_corretamente() {
-        Fornecedor fornecedor1 = new Fornecedor(null, "CA peças LTDA");
-        assertThat(fornecedor1.getNome(), containsString("CA peças LTDA"));
-    }
-
-    /**
-     * Deve testar o get endereco esta funcionando corretamente.
-     */
-    @Test
-    public void deve_testar_o_getEndereco_esta_funcionando_corretamente() {
-        fornecedor.getEndereco();
-        assertThat(fornecedor.toString(), containsString("cep="));
-    }
-
+    
     /**
      * Deve testar o get produto esta funcionando corretamente.
      */
@@ -180,7 +214,58 @@ public class FornecedorTest {
         fornecedor.setProduto("5 placas mães");
         assertThat(fornecedor.getProduto(), is("5 placas mães"));
     }
+    
+    /**
+     * Nao deve aceitar espacos em branco no produto.
+     */
+    @Test
+    public void nao_deve_aceitar_espacos_em_branco_no_produto() {
+        assertFalse(fornecedor.getProduto().trim().isEmpty());
+    }
+    
+    @Test
+	public void deve_aceitar_produto_sem_espaco() {
+    	fornecedor.setProduto("Placamãe");
+		assertTrue(isValid(fornecedor, "O nome do produto está incorreto"));
+	}
 
+	@Test
+	public void deve_aceitar_produto_com_acento() {
+		fornecedor.setProduto("placa mãe");
+		assertTrue(isValid(fornecedor, "O nome do produto está incorreto"));
+	}
+
+	@Test
+	public void deve_aceitar_produto_com_cedilha() {
+		fornecedor.setProduto("ççç");
+		assertTrue(isValid(fornecedor, "O nome do produto está incorreto"));
+	}
+
+	@Test
+	public void deve_aceitar_produto_com_espaco() {
+		fornecedor.setProduto("Processador AMD FX 6300");
+		assertTrue(isValid(fornecedor, "O nome do produto está incorreto"));
+	}
+    
+    /**
+     * Deve validar produto annotations.
+     */
+    @Test
+    public void deve_validar_produto_annotations() {
+        Fornecedor cadastroValidator = Fixture.from(Fornecedor.class).gimme("valido");
+        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getProduto()));
+    }
+    
+    /* TESTES NO TELEFONE */
+    
+    /**
+     * Nao deve aceitar telefone nulo.
+     */
+    @Test
+    public void nao_deve_aceitar_telefone_nulo() {
+        assertNotNull(fornecedor.getTelefone());
+    }
+    
     /**
      * Deve testar o exception do set telefones.
      */
@@ -190,11 +275,12 @@ public class FornecedorTest {
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
+        telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         fornecedor.setTelefones(telefone);
     }
-
+    
     /**
-     * Deve testar o set telefoness.
+     * Deve testar o set telefones.
      */
     @Test
     public void deve_testar_o_setTelefones() {
@@ -202,6 +288,34 @@ public class FornecedorTest {
         telefone.add(Fixture.from(Telefone.class).gimme("valido"));
         fornecedor.setTelefones(telefone);
         assertTrue(fornecedor.equals(fornecedor));
+    }
+    
+    /**
+     * Deve validar telefones annotations.
+     */
+    @Test
+    public void deve_validar_telefones_annotations() {
+        Fornecedor cadastroValidator = Fixture.from(Fornecedor.class).gimme("valido");
+        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getTelefone()));
+    }
+    
+    /* TESTES NO ENDERECO */
+    
+    /**
+     * Nao deve aceitar endereco nulo.
+     */
+    @Test
+    public void nao_deve_aceitar_endereco_nulo() {
+        assertNotNull(fornecedor.getEndereco());
+    }
+
+    /**
+     * Deve testar o get endereco esta funcionando corretamente.
+     */
+    @Test
+    public void deve_testar_o_getEndereco_esta_funcionando_corretamente() {
+        fornecedor.getEndereco();
+        assertThat(fornecedor.toString(), containsString("cep="));
     }
 
     /**
@@ -227,29 +341,45 @@ public class FornecedorTest {
         assertTrue(fornecedor.equals(fornecedor));
 
     }
-
+    
     /**
-     * Nao deve aceitar espacos em branco no cnpj.
+     * Deve validar enderecos annotations.
      */
     @Test
-    public void nao_deve_aceitar_espacos_em_branco_no_cnpj() {
-        assertFalse(fornecedor.getCnpj().trim().isEmpty());
+    public void deve_validar_enderecos_annotations() {
+        Fornecedor cadastroValidator = Fixture.from(Fornecedor.class).gimme("valido");
+        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getEndereco()));
+    }
+    
+    /* OUTROS TESTES */
+
+    /**
+     * Deve gerar dados validos.
+     */
+    @Test
+    public void deve_gerar_dados_validos() {
+        Set<ConstraintViolation<Fornecedor>> constraintViolations = validator.validate(fornecedor);
+        assertEquals(0, constraintViolations.size());
     }
 
     /**
-     * Nao deve aceitar espacos em branco no nome.
+     * Nao deve aceitar fornecedor sem cnpj nome telefone produto endereco.
      */
     @Test
-    public void nao_deve_aceitar_espacos_em_branco_no_nome() {
-        assertFalse(fornecedor.getNome().trim().isEmpty());
+    public void nao_deve_aceitar_Fornecedor_sem_cnpj_nome_telefone_produto_endereco() {
+        Fornecedor Fornecedor = new Fornecedor();
+        Set<ConstraintViolation<Fornecedor>> restricoes = validator.validate(Fornecedor);
+        assertThat(restricoes, Matchers.hasSize(3));
     }
 
     /**
-     * Nao deve aceitar espacos em branco no produto.
+     * Deve passar na validacao com cnpj nome telefone produto endereco informados.
      */
     @Test
-    public void nao_deve_aceitar_espacos_em_branco_no_produto() {
-        assertFalse(fornecedor.getProduto().trim().isEmpty());
+    public void deve_passar_na_validacao_com_cnpj_nome_telefone_produto_endereco_informados() {
+        fornecedor = Fixture.from(Fornecedor.class).gimme("valido");
+        Set<ConstraintViolation<Fornecedor>> restricoes = validator.validate(fornecedor);
+        assertThat(restricoes, empty());
     }
 
     /**
@@ -351,51 +481,6 @@ public class FornecedorTest {
     }
 
     /**
-     * Deve validar cnpj annotations.
-     */
-    @Test
-    public void deve_validar_cnpj_annotations() {
-        Fornecedor cadastroValidator = Fixture.from(Fornecedor.class).gimme("valido");
-        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getCnpj()));
-    }
-
-    /**
-     * Deve validar nome annotations.
-     */
-    @Test
-    public void deve_validar_nome_annotations() {
-        Fornecedor cadastroValidator = Fixture.from(Fornecedor.class).gimme("valido");
-        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getNome()));
-    }
-
-    /**
-     * Deve validar telefones annotations.
-     */
-    @Test
-    public void deve_validar_telefones_annotations() {
-        Fornecedor cadastroValidator = Fixture.from(Fornecedor.class).gimme("valido");
-        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getTelefone()));
-    }
-
-    /**
-     * Deve validar produto annotations.
-     */
-    @Test
-    public void deve_validar_produto_annotations() {
-        Fornecedor cadastroValidator = Fixture.from(Fornecedor.class).gimme("valido");
-        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getProduto()));
-    }
-
-    /**
-     * Deve validar enderecos annotations.
-     */
-    @Test
-    public void deve_validar_enderecos_annotations() {
-        Fornecedor cadastroValidator = Fixture.from(Fornecedor.class).gimme("valido");
-        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getEndereco()));
-    }
-
-    /**
      * Tear down.
      */
     @After
@@ -408,9 +493,6 @@ public class FornecedorTest {
      */
     @AfterClass
     public static void tearDownAfterClass() {
-        System.out.println(fornecedor);
-        System.out.println("Finalizamos os testes na classe funcionario\n");
-        System.out.println("-----/-----/-----/-----/-----/-----/-----\n");
     }
 
 }

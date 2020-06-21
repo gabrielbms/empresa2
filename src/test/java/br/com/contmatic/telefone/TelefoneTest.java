@@ -45,14 +45,17 @@ public class TelefoneTest {
     
     /** The validator. */
     private Validator validator;
+    
+    /** The factory. */
+    private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+
 
     /**
      * Inicio dos testes.
      */
     @BeforeClass
-    public static void InicioDosTestes() {
+    public static void setUpBeforeClass() {
         FixtureFactoryLoader.loadTemplates("br.com.contmatic.util");
-        System.out.println("Iniciamos os testes na classe telefone");
     }
 
     /**
@@ -64,6 +67,150 @@ public class TelefoneTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         this.validator = factory.getValidator();
     }
+    
+    public boolean isValid(Telefone telefone, String mensagem) {
+		validator = factory.getValidator();
+		boolean valido = true;
+		Set<ConstraintViolation<Telefone>> restricoes = validator.validate(telefone);
+		for (ConstraintViolation<Telefone> constraintViolation : restricoes)
+			if (constraintViolation.getMessage().equalsIgnoreCase(mensagem))
+				valido = false;
+		return valido;
+	}
+    
+    /* TESTES NO DDD*/
+    
+    /**
+     * Nao deve aceitar ddd nulo.
+     */
+    @Test
+    public void nao_deve_aceitar_ddd_nulo() {
+        assertNotNull(telefone.getDdd());
+    }
+    
+    /**
+     * Deve testar o get ddd esta funcionando corretamente.
+     */
+    @Test
+    public void deve_testar_o_getDdd_esta_funcionando_corretamente() {
+        telefoneDDD = TelefoneDDD.valueOf("DDD11");
+        assertTrue(telefoneDDD.getDdd() == 11);
+    }
+    
+    /**
+     * Deve testar o get complemento esta funcionando corretamente.
+     */
+    @Test
+    public void deve_testar_o_getComplemento_esta_funcionando_corretamente() {
+        telefoneDDD = TelefoneDDD.valueOf("DDD11");
+        assertTrue(telefoneDDD.getComplemento().equals("São Paulo – SP"));
+    }
+    
+    /**
+     * Deve validar ddd annotations.
+     */
+    @Test
+    public void deve_validar_ddd_annotations() {
+        Telefone cadastroValidator = Fixture.from(Telefone.class).gimme("valido");
+        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getDdd()));
+    }
+    
+    /* TESTES NO NUMERO*/
+    
+    /**
+     * Nao deve aceitar numero nulo.
+     */
+    @Test
+    public void nao_deve_aceitar_numero_nulo() {
+        assertNotNull(telefone.getNumero());
+    }
+    
+    /**
+     * Deve testar o get numero esta funcionando corretamente.
+     */
+    @Test
+    public void deve_testar_o_getNumero_esta_funcionando_corretamente() {
+        telefone.setNumero("927219389");
+        assertThat(telefone.getNumero(), containsString("927219389"));
+    }
+    
+    @Test
+    public void nao_deve_aceitar_espacos_em_branco_no_numero() {
+        assertFalse(telefone.getNumero().trim().isEmpty());
+    }
+    
+    @Test
+	public void deve_aceitar_numero_valido() {
+		telefone.setNumero("946756054");
+		assertTrue(isValid(telefone, "O campo Numero está invalido"));
+	}
+    
+    @Test
+	public void nao_deve_aceitar_numero_com_espaço() {
+		telefone.setNumero("94675 6054");
+		assertFalse(isValid(telefone, "O campo Numero está invalido"));
+	}
+    
+    @Test
+	public void nao_deve_aceitar_letras_no_numero() {
+		telefone.setNumero("94675G054");
+		assertFalse(isValid(telefone, "O campo Numero está invalido"));
+	}
+    
+    @Test
+	public void nao_deve_aceitar_caracter_especial_no_numero() {
+		telefone.setNumero("94675@#$4");
+		assertFalse(isValid(telefone, "O campo Numero está invalido"));
+	}
+    
+    /**
+     * Deve validar numero annotations.
+     */
+    @Test
+    public void deve_validar_numero_annotations() {
+        Telefone cadastroValidator = Fixture.from(Telefone.class).gimme("valido");
+        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getNumero()));
+    }
+    
+    /* TESTES NO TIPO TELEFONE*/
+    
+    /**
+     * Deve testar o get descricao esta funcionando corretameante.
+     */
+    @Test
+    public void deve_testar_o_getDescricao_esta_funcionando_corretameante() {
+        tipoTelefone = TipoTelefone.CELULAR;
+        assertTrue(tipoTelefone.getDescricao().equals("Celular"));
+    }
+    
+    /**
+     * Deve testar o get tamanho esta funcionando corretameante.
+     */
+    @Test
+    public void deve_testar_o_getTamanho_esta_funcionando_corretameante() {
+        tipoTelefone = TipoTelefone.CELULAR;
+        assertTrue(tipoTelefone.getTamanho() == 9);
+    }
+    
+    /**
+     * Deve validar tipo telefone annotations.
+     */
+    @Test
+    public void deve_validar_tipo_telefone_annotations() {
+        Telefone cadastroValidator = Fixture.from(Telefone.class).gimme("valido");
+        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getTelefone()));
+    }
+    
+    /**
+     * Nao deve aceitar telefone nulo.
+     */
+    @Test
+    public void nao_deve_aceitar_telefone_nulo() {
+        assertNotNull(telefone.getTelefone());
+    }
+    
+    
+    /* OUTROS TESTES */
 
     /**
      * Deve gerar dados validos.
@@ -94,64 +241,7 @@ public class TelefoneTest {
         assertThat(restricoes, empty());
     }
 
-    /**
-     * Nao deve aceitar ddd nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_ddd_nulo() {
-        assertNotNull(telefone.getDdd());
-    }
-
-    /**
-     * Nao deve aceitar numero nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_numero_nulo() {
-        assertNotNull(telefone.getNumero());
-    }
-
-    /**
-     * Nao deve aceitar telefone nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_telefone_nulo() {
-        assertNotNull(telefone.getTelefone());
-    }
-
-    /**
-     * Deve testar o get ddd esta funcionando corretamente.
-     */
-    @Test
-    public void deve_testar_o_getDdd_esta_funcionando_corretamente() {
-        telefoneDDD = TelefoneDDD.valueOf("DDD11");
-        assertTrue(telefoneDDD.getComplemento().equals("São Paulo – SP") | telefoneDDD.getDdd() == 11);
-    }
-
-    /**
-     * Deve testar o get ddd esta funcionando corretameante.
-     */
-    @Test
-    public void deve_testar_o_getDdd_esta_funcionando_corretameante() {
-        tipoTelefone = TipoTelefone.CELULAR;
-        assertTrue(tipoTelefone.getDescricao().equals("Celular") | tipoTelefone.getTamanho() == 9);
-    }
-
-    /**
-     * Deve testar o get numero esta funcionando corretamente.
-     */
-    @Test
-    public void deve_testar_o_getNumero_esta_funcionando_corretamente() {
-        telefone.setNumero("927219389");
-        assertThat(telefone.getNumero(), containsString("927219389"));
-    }
-
-    /**
-     * Nao deve aceitar espacos em branco no numero.
-     */
-    @Test
-    public void nao_deve_aceitar_espacos_em_branco_no_numero() {
-        assertFalse(telefone.getNumero().trim().isEmpty());
-    }
+    
 
     /**
      * Deve retornar false no hash code com um endereco de numero null.
@@ -173,38 +263,10 @@ public class TelefoneTest {
     }
 
     /**
-     * Deve validar ddd annotations.
-     */
-    @Test
-    public void deve_validar_ddd_annotations() {
-        Telefone cadastroValidator = Fixture.from(Telefone.class).gimme("valido");
-        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getDdd()));
-    }
-
-    /**
-     * Deve validar numero annotations.
-     */
-    @Test
-    public void deve_validar_numero_annotations() {
-        Telefone cadastroValidator = Fixture.from(Telefone.class).gimme("valido");
-        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getNumero()));
-    }
-
-    /**
-     * Deve validar tipo telefone annotations.
-     */
-    @Test
-    public void deve_validar_tipo_telefone_annotations() {
-        Telefone cadastroValidator = Fixture.from(Telefone.class).gimme("valido");
-        assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getTelefone()));
-    }
-
-    /**
      * Tear down.
      */
     @After
     public void tearDown() {
-
     }
 
     /**
@@ -212,9 +274,6 @@ public class TelefoneTest {
      */
     @AfterClass
     public static void teste_no_toString() {
-        System.out.println(telefone);
-        System.out.println("Finalizamos os testes na classe endereco\n");
-
     }
 
 }

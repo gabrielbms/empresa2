@@ -4,16 +4,21 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CPF;
 import org.joda.time.LocalDate;
-
-import com.google.common.base.Preconditions;
 
 import br.com.contmatic.endereco.Endereco;
 import br.com.contmatic.telefone.Telefone;
@@ -21,18 +26,20 @@ import br.com.contmatic.util.RegexType;
 
 /**
  * The Class Funcionario.
+ * 
+ * @author gabriel.santos
  */
 public class Funcionario {
 
     /** The cpf. */
-    @CPF(message = "O CPF do funcionario está inválido")
-    @NotBlank(message = "O campo CPF não pode estar nulo")
+    @CPF(message = "O CPF do cliente está inválido")
+    @NotNull(message = "O campo CPF não pode estar nulo")
     private String cpf;
 
     /** The nome. */
-    @Size(min = 3, max = 20)
-    @NotBlank(message = "O campo nome não pode estar nulo")
-    @Pattern(regexp = RegexType.LETRAS, message = "O nome do funcionario está incorreto")    
+    @NotBlank(message = "O campo nome não pode estar vazio")
+    @Pattern(regexp = RegexType.NOME, message = "O nome do funcionário está incorreto")
+    @Size(min = 2, max = 80, message = "O nome mínimo é de {min} caracteres e no máximo de {max} caracteres")
     private String nome;
 
     /** The idade. */
@@ -42,25 +49,30 @@ public class Funcionario {
 
     /** The telefones. */
     @Valid
-    @NotBlank(message = "O campo telefone não pode estar nulo")
+    @NotNull(message = "O telefone do funcionario não pode ser vazio")
+    @Size.List({ @Size(min = 1, message = "os telefones do funcionario não devem ser menor que um"),
+		@Size(max = 3, message = "O máximo de telefones que podem ser salvo totaliza {max} telefones") })
     private Set<Telefone> telefones;
 
     /** The enderecos. */
     @Valid
-    @NotBlank(message = "O campo endereco não pode estar nulo")
+    @NotNull(message = "O endereço da empresa está vazio")
+	@Size.List({ @Size(min = 1, message = "Tem que cadastrar pelo menos um endereço"),
+			@Size(max = 3, message = "A quantidade máxima de endeços é {max} endereços") })
     private Set<Endereco> enderecos;
 
     /** The salario. */
-    @NotBlank(message = "O campo salario não pode estar nulo")
+    @Min(value = 1, message = "O salário do funcionário não pode ser negativo")
     private BigDecimal salario;
 
     /** The data contratacao. */
-    @NotBlank(message = "O campo data de contratação não pode estar nulo")
+    @NotNull(message = "A data de contratação do funcionario não deve estar nula")
+    @Past(message = "A data de contratação não pode ser maior que a data atual")
     private LocalDate dataContratacao;
 
     /** The data salario. */
-    @Future
-    @NotBlank(message = "O campo data de salario não pode estar nulo")
+    @Future(message = "A data do salario deve ser maior que a data atual")
+    @NotNull(message = "A data do salário do funcionario não deve estar nula")
     private LocalDate dataSalario;
 
     /**
@@ -102,149 +114,71 @@ public class Funcionario {
 
     }
 
-    /**
-     * Gets the cpf.
-     *
-     * @return the cpf
-     */
     public String getCpf() {
         return cpf;
     }
 
-    /**
-     * Sets the cpf.
-     *
-     * @param cpf the new cpf
-     */
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
-    /**
-     * Gets the nome.
-     *
-     * @return the nome
-     */
     public String getNome() {
         return nome;
     }
 
-    /**
-     * Sets the nome.
-     *
-     * @param nome the new nome
-     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /**
-     * Gets the idade.
-     *
-     * @return the idade
-     */
     public int getIdade() {
         return idade;
     }
 
-    /**
-     * Sets the idade.
-     *
-     * @param idade the new idade
-     */
     public void setIdade(int idade) {
         this.idade = idade;
     }
 
-    /**
-     * Gets the telefone.
-     *
-     * @return the telefone
-     */
     public @Valid Set<Telefone> getTelefone() {
         return telefones;
     }
 
-    /**
-     * Gets the endereco.
-     *
-     * @return the endereco
-     */
     public @Valid Set<Endereco> getEndereco() {
         return enderecos;
     }
 
-    /**
-     * Gets the salario.
-     *
-     * @return the salario
-     */
     public BigDecimal getSalario() {
         return salario;
     }
 
-    /**
-     * Sets the salario.
-     *
-     * @param salario the new salario
-     */
     public void setSalario(BigDecimal salario) {
-        this.salario = salario;
+    	if (salario.doubleValue() >= 1) {
+    		this.salario = salario;
+    	} else {
+    		throw new IllegalArgumentException("salario não pode ser negativo");
+    	}
     }
 
-    /**
-     * Gets the data contratacao.
-     *
-     * @return the data contratacao
-     */
     public LocalDate getDataContratacao() {
         return dataContratacao;
     }
 
-    /**
-     * Sets the data contratacao.
-     *
-     * @param dataPagamento the new data contratacao
-     */
     public void setDataContratacao(LocalDate dataPagamento) {
         this.dataContratacao = dataPagamento;
     }
 
-    /**
-     * Gets the data salario.
-     *
-     * @return the data salario
-     */
     public LocalDate getDataSalario() {
         return dataSalario;
     }
 
-    /**
-     * Sets the data salario.
-     *
-     * @param dataSalario the new data salario
-     */
     public void setDataSalario(LocalDate dataSalario) {
         this.dataSalario = dataSalario;
     }
 
-    /**
-     * Sets the telefones.
-     *
-     * @param telefone the new telefones
-     */
     public void setTelefones(Set<Telefone> telefone) {
-        Preconditions.checkArgument(telefone.size() < 2, "Somente pode possuir um telefone");
         this.telefones = telefone;
     }
 
-    /**
-     * Sets the enderecos.
-     *
-     * @param endereco the new enderecos
-     */
     public void setEnderecos(Set<Endereco> endereco) {
-        Preconditions.checkArgument(endereco.size() < 2, "Somente pode possuir um endereco");
         this.enderecos = endereco;
     }
 
@@ -278,4 +212,5 @@ public class Funcionario {
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
+    
 }
