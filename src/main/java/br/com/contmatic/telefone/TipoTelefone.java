@@ -2,6 +2,8 @@ package br.com.contmatic.telefone;
 
 /**
  * The Enum TipoTelefone.
+ * 
+ * @author gabriel.santos
  */
 public enum TipoTelefone {
 

@@ -10,6 +10,8 @@ import javax.validation.Validator;
 
 /**
  * The Class Annotations.
+ * 
+ * @author gabriel.santos
  */
 public class Annotations {
 

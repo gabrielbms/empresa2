@@ -13,6 +13,8 @@ import br.com.contmatic.util.RegexType;
 
 /**
  * The Class Telefone.
+ * 
+ * @author gabriel.santos
  */
 public class Telefone {
 

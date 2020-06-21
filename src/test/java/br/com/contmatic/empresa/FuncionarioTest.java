@@ -34,6 +34,8 @@ import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
 /**
  * The Class FuncionarioTest.
+ * 
+ * @author gabriel.santos
  */
 @FixMethodOrder(NAME_ASCENDING)
 public class FuncionarioTest {
@@ -65,6 +67,13 @@ public class FuncionarioTest {
         this.validator = factory.getValidator();
     }
     
+    /**
+     * Checks if is valid.
+     *
+     * @param funcionario the funcionario
+     * @param mensagem the mensagem
+     * @return true, if is valid
+     */
     public boolean isValid(Funcionario funcionario, String mensagem) {
 		validator = factory.getValidator();
 		boolean valido = true;
@@ -141,6 +150,9 @@ public class FuncionarioTest {
         assertTrue(funcionario.getNome().equals("Gabriel"));
     }
 
+	/**
+	 * Deve aceitar nome valido.
+	 */
 	@Test
 	public void deve_aceitar_nome_valido() {
 		funcionario.setNome("Gabriel");
@@ -155,30 +167,45 @@ public class FuncionarioTest {
         assertFalse(funcionario.getNome().trim().isEmpty());
     }
 
+	/**
+	 * Deve aceitar nome sem espaco.
+	 */
 	@Test
 	public void deve_aceitar_nome_sem_espaco() {
 		funcionario.setNome("GabrielBueno");
 		assertTrue(isValid(funcionario, "O nome do funcionário está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar nome com acento.
+	 */
 	@Test
 	public void deve_aceitar_nome_com_acento() {
 		funcionario.setNome("João");
 		assertTrue(isValid(funcionario, "O nome do funcionário está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar nome com cedilha.
+	 */
 	@Test
 	public void deve_aceitar_nome_com_cedilha() {
 		funcionario.setNome("Maria Conceição");
 		assertTrue(isValid(funcionario, "O nome do funcionário está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar nome com espaco.
+	 */
 	@Test
 	public void deve_aceitar_nome_com_espaco() {
 		funcionario.setNome("Gabriel Bueno");
 		assertTrue(isValid(funcionario, "O nome do funcionário está incorreto"));
 	}
 
+	/**
+	 * Nao deve aceitar nome com arroba.
+	 */
 	@Test
 	public void nao_deve_aceitar_nome_com_arroba() {
 		funcionario.setNome("G@briel");
@@ -196,7 +223,10 @@ public class FuncionarioTest {
 	
     /* TESTES NA IDADE */
 	
-	@Test
+	/**
+     * Nao deve aceitar idade negativa.
+     */
+    @Test
 	public void nao_deve_aceitar_idade_negativa() {
 		funcionario.setIdade(-19);
 		assertFalse(isValid(funcionario, "A idade do funcionario não pode ser menor que 1"));
@@ -211,12 +241,18 @@ public class FuncionarioTest {
         assertThat(funcionario.getIdade(), is(19));
     }
 
+	/**
+	 * Nao deve aceitar idade igual a zero.
+	 */
 	@Test
 	public void nao_deve_aceitar_idade_igual_a_zero() {
 		funcionario.setIdade(0);
 		assertFalse(isValid(funcionario, "A idade do funcionario não pode ser menor que 1"));
 	}
 
+	/**
+	 * Deve aceitar idade valida.
+	 */
 	@Test
 	public void deve_aceitar_idade_valida() {
 		funcionario.setIdade(19);
@@ -234,12 +270,18 @@ public class FuncionarioTest {
 
     /* TESTES NO TELEFONE */
 	
-	@Test
+	/**
+     * Nao deve aceitar telefone nulo.
+     */
+    @Test
 	public void nao_deve_aceitar_telefone_nulo() {
 		funcionario.setTelefones(null);
 		assertFalse(isValid(funcionario, "O telefone do funcionario não pode ser vazio"));
 	}
 	
+	/**
+	 * Nao deve aceitar telefone vazio.
+	 */
 	@Test
 	public void nao_deve_aceitar_telefone_vazio() {
 		funcionario.setTelefones(new HashSet<Telefone>());
@@ -268,7 +310,10 @@ public class FuncionarioTest {
 	
     /* TESTES NO ENDEREÇO */
 	
-	@Test
+	/**
+     * Nao deve aceitar endereco nulo.
+     */
+    @Test
 	public void nao_deve_aceitar_endereco_nulo() {
 		funcionario.setEnderecos(null);
 		assertFalse(isValid(funcionario, "O endereço da empresa está vazio"));
@@ -283,6 +328,9 @@ public class FuncionarioTest {
         assertThat(funcionario.toString(), containsString("cep="));
     }
 	
+	/**
+	 * Nao deve aceitar endereco vazio.
+	 */
 	@Test
 	public void nao_deve_aceitar_endereco_vazio() {
 		funcionario.setEnderecos(new HashSet<Endereco>());
@@ -328,18 +376,27 @@ public class FuncionarioTest {
         assertThat(funcionario.getSalario(), is(BigDecimal.valueOf(1500.00)));
     }
     
+    /**
+     * Nao deve aceitar salario negativo.
+     */
     @Test(expected = IllegalArgumentException.class)
 	public void nao_deve_aceitar_salario_negativo() {
 		funcionario.setSalario(BigDecimal.valueOf(-2500.00));
 		assertFalse(funcionario.getSalario() == BigDecimal.valueOf(-2500.00));
 	}
     
+    /**
+     * Nao deve aceitar salario igual a 0.
+     */
     @Test(expected = IllegalArgumentException.class)
 	public void nao_deve_aceitar_salario_igual_a_0() {
 		funcionario.setSalario(BigDecimal.valueOf(0.00));
 		assertFalse(funcionario.getSalario() == BigDecimal.valueOf(0.00));
 	}
     
+    /**
+     * Deve aceitar salario valido.
+     */
     @Test
 	public void deve_aceitar_salario_valido() {
 		funcionario.setSalario(BigDecimal.valueOf(2500.00));
@@ -375,12 +432,18 @@ public class FuncionarioTest {
         assertThat(funcionario.toString(), containsString("2019-05-05"));
     }
 
+	/**
+	 * Nao deve aceitar data contratacao no futuro.
+	 */
 	@Test
 	public void nao_deve_aceitar_dataContratacao_no_futuro() {
 		funcionario.setDataContratacao(new LocalDate(2048, 10, 10));
 		assertFalse(isValid(funcionario, "A data de contratação não pode ser maior que a data atual"));
 	}
 
+	/**
+	 * Deve aceitar data contratacao valida.
+	 */
 	@Test
 	public void deve_aceitar_dataContratacao_valida() {
 		funcionario.setDataContratacao(new LocalDate(2014, 10, 10));
@@ -416,6 +479,9 @@ public class FuncionarioTest {
         assertThat(funcionario.toString(), containsString("2020-07-07"));
     }
 
+	/**
+	 * Deve aceitar data salario valida.
+	 */
 	@Test
 	public void deve_aceitar_dataSalario_valida() {
 		funcionario.setDataSalario(new LocalDate(2021, 10, 10));

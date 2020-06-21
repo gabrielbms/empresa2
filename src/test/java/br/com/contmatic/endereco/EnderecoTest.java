@@ -31,6 +31,8 @@ import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
 /**
  * The Class EnderecoTest.
+ * 
+ * @author gabriel.santos
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EnderecoTest {
@@ -62,6 +64,13 @@ public class EnderecoTest {
         this.validator = factory.getValidator();
     }
     
+    /**
+     * Checks if is valid.
+     *
+     * @param endereco the endereco
+     * @param mensagem the mensagem
+     * @return true, if is valid
+     */
     public boolean isValid(Endereco endereco, String mensagem) {
 		validator = factory.getValidator();
 		boolean valido = true;
@@ -91,6 +100,9 @@ public class EnderecoTest {
         assertThat(endereco.getCep(), containsString("03806040"));
     }
     
+    /**
+     * Nao deve aceitar espacos em branco no cep.
+     */
     @Test
     public void nao_deve_aceitar_espacos_em_branco_no_Cep() {
         assertFalse(endereco.getCep().trim().isEmpty());
@@ -123,36 +135,54 @@ public class EnderecoTest {
         assertFalse(endereco.getRua().trim().isEmpty());
     }
     
+    /**
+     * Deve aceitar rua valida.
+     */
     @Test
 	public void deve_aceitar_rua_valida() {
     	endereco.setRua("Gabriel Silva");
 		assertTrue(isValid(endereco, "A rua do endereço está incorreto"));
 	}
 
+    /**
+     * Deve aceitar rua sem espaco.
+     */
     @Test
 	public void deve_aceitar_rua_sem_espaco() {
 		endereco.setRua("Joselito");
 		assertTrue(isValid(endereco, "A rua do endereço está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar rua com acento.
+	 */
 	@Test
 	public void deve_aceitar_rua_com_acento() {
 		endereco.setRua("João dos santos");
 		assertTrue(isValid(endereco, "A rua do endereço está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar rua com cedilha.
+	 */
 	@Test
 	public void deve_aceitar_rua_com_cedilha() {
 		endereco.setRua("Lurdes Conceição");
 		assertTrue(isValid(endereco, "A rua do endereço está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar rua com espaco.
+	 */
 	@Test
 	public void deve_aceitar_rua_com_espaco() {
 		endereco.setRua("José da Silva guimarães");
 		assertTrue(isValid(endereco, "A rua do endereço está incorreto"));
 	}
 
+	/**
+	 * Nao deve aceitar rua com arroba.
+	 */
 	@Test
 	public void nao_deve_aceitar_rua_com_arroba() {
 		endereco.setRua("rua com @");
@@ -223,36 +253,54 @@ public class EnderecoTest {
         assertFalse(endereco.getComplemento().trim().isEmpty());
     }
     
+    /**
+     * Deve aceitar complemento valido.
+     */
     @Test
 	public void deve_aceitar_complemento_valido() {
     	endereco.setComplemento("apartamento 64");
 		assertTrue(isValid(endereco, "O complemento do endereço está incorreto"));
 	}
 
+    /**
+     * Deve aceitar complemento sem espaco.
+     */
     @Test
 	public void deve_aceitar_complemento_sem_espaco() {
 		endereco.setComplemento("complexo6");
 		assertTrue(isValid(endereco, "O complemento do endereço está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar complemento com acento.
+	 */
 	@Test
 	public void deve_aceitar_complemento_com_acento() {
 		endereco.setComplemento("próximo ao posto José gasosa");
 		assertTrue(isValid(endereco, "O complemento do endereço está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar complemento com cedilha.
+	 */
 	@Test
 	public void deve_aceitar_complemento_com_cedilha() {
 		endereco.setComplemento("próximo a loja da maria lurdes Conceição");
 		assertTrue(isValid(endereco, "O complemento do endereço está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar complemento com espaco.
+	 */
 	@Test
 	public void deve_aceitar_complemento_com_espaco() {
 		endereco.setComplemento("apartamento 64 bloco 4");
 		assertTrue(isValid(endereco, "O complemento do endereço está incorreto"));
 	}
 
+	/**
+	 * Nao deve aceitar complemento com arroba.
+	 */
 	@Test
 	public void nao_deve_aceitar_complemento_com_arroba() {
 		endereco.setComplemento("próximo a l@n house");
@@ -295,36 +343,54 @@ public class EnderecoTest {
         assertFalse(endereco.getBairro().trim().isEmpty());
     }
     
+    /**
+     * Deve aceitar bairro valido.
+     */
     @Test
 	public void deve_aceitar_bairro_valido() {
     	endereco.setBairro("Morumbi");
 		assertTrue(isValid(endereco, "O bairro do endereço está incorreto"));
 	}
 
+    /**
+     * Deve aceitar bairro sem espaco.
+     */
     @Test
 	public void deve_aceitar_bairro_sem_espaco() {
 		endereco.setBairro("Jardins");
 		assertTrue(isValid(endereco, "O bairro do endereço está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar bairro com acento.
+	 */
 	@Test
 	public void deve_aceitar_bairro_com_acento() {
 		endereco.setBairro("Parque São José");
 		assertTrue(isValid(endereco, "O bairro do endereço está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar bairro com cedilha.
+	 */
 	@Test
 	public void deve_aceitar_bairro_com_cedilha() {
 		endereco.setBairro("Parque do Ç");
 		assertTrue(isValid(endereco, "O bairro do endereço está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar bairro com espaco.
+	 */
 	@Test
 	public void deve_aceitar_bairro_com_espaco() {
 		endereco.setBairro("Jardim Grimaldi");
 		assertTrue(isValid(endereco, "O bairro do endereço está incorreto"));
 	}
 
+	/**
+	 * Nao deve aceitar bairro com arroba.
+	 */
 	@Test
 	public void nao_deve_aceitar_bairro_com_arroba() {
 		endereco.setBairro("J@rdim do joselito");
@@ -368,36 +434,54 @@ public class EnderecoTest {
         assertFalse(endereco.getCidade().trim().isEmpty());
     }
     
+    /**
+     * Deve aceitar cidade valida.
+     */
     @Test
 	public void deve_aceitar_cidade_valida() {
     	endereco.setCidade("São Paulo");
 		assertTrue(isValid(endereco, "A cidade do endereço está incorreto"));
 	}
 
+    /**
+     * Deve aceitar cidade sem espaco.
+     */
     @Test
 	public void deve_aceitar_cidade_sem_espaco() {
 		endereco.setCidade("Barueri");
 		assertTrue(isValid(endereco, "O nome do funcionário está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar cidade com acento.
+	 */
 	@Test
 	public void deve_aceitar_cidade_com_acento() {
 		endereco.setCidade("Jundiaí");
 		assertTrue(isValid(endereco, "O nome do funcionário está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar cidadee com cedilha.
+	 */
 	@Test
 	public void deve_aceitar_cidadee_com_cedilha() {
 		endereco.setCidade("Monções");
 		assertTrue(isValid(endereco, "O nome do funcionário está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar cidade com espaco.
+	 */
 	@Test
 	public void deve_aceitar_cidade_com_espaco() {
 		endereco.setCidade("São Paulo");
 		assertTrue(isValid(endereco, "O nome do funcionário está incorreto"));
 	}
 
+	/**
+	 * Nao deve aceitar cidade com arroba.
+	 */
 	@Test
 	public void nao_deve_aceitar_cidade_com_arroba() {
 		endereco.setCidade("cidade com @rroba");

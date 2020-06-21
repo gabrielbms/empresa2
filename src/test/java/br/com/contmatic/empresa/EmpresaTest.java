@@ -34,6 +34,8 @@ import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;;
 
 /**
  * The Class EmpresaTest.
+ * 
+ * @author gabriel.santos
  */
 @FixMethodOrder(NAME_ASCENDING)
 public class EmpresaTest {
@@ -65,6 +67,13 @@ public class EmpresaTest {
 		this.validator = factory.getValidator();
 	}
 	
+	/**
+	 * Checks if is valid.
+	 *
+	 * @param empresa the empresa
+	 * @param mensagem the mensagem
+	 * @return true, if is valid
+	 */
 	public boolean isValid(Empresa empresa, String mensagem) {
 		validator = factory.getValidator();
 		boolean valido = true;
@@ -142,6 +151,9 @@ public class EmpresaTest {
 		assertFalse(violations.isEmpty());
 	}
 	
+	/**
+	 * Deve aceitar nome valido.
+	 */
 	@Test
 	public void deve_aceitar_nome_valido() {
 		empresa.setNome("Gabriel");
@@ -156,30 +168,45 @@ public class EmpresaTest {
 		assertFalse(empresa.getNome().trim().isEmpty());
 	}
 	
+	/**
+	 * Deve aceitar nome sem espaco.
+	 */
 	@Test
 	public void deve_aceitar_nome_sem_espaco() {
 		empresa.setNome("GabrielBueno");
 		assertTrue(isValid(empresa, "O nome da empresa está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar nome com acento.
+	 */
 	@Test
 	public void deve_aceitar_nome_com_acento() {
 		empresa.setNome("João");
 		assertTrue(isValid(empresa, "O nome da empresa está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar nome com cedilha.
+	 */
 	@Test
 	public void deve_aceitar_nome_com_cedilha() {
 		empresa.setNome("Maria Conceição");
 		assertTrue(isValid(empresa, "O nome da empresa está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar nome com espaco.
+	 */
 	@Test
 	public void deve_aceitar_nome_com_espaco() {
 		empresa.setNome("Gabriel Bueno");
 		assertTrue(isValid(empresa, "O nome da empresa está incorreto"));
 	}
 
+	/**
+	 * Nao deve aceitar nome com arroba.
+	 */
 	@Test
 	public void nao_deve_aceitar_nome_com_arroba() {
 		empresa.setNome("G@briel");
@@ -222,30 +249,45 @@ public class EmpresaTest {
 		assertFalse(empresa.getSite().trim().isEmpty());
 	}
 	
+	/**
+	 * Deve aceitar site valido.
+	 */
 	@Test
 	public void deve_aceitar_site_valido() {
 		empresa.setSite("http://www.gbconsertos.com.br");
 		assertTrue(isValid(empresa, "O site da empresa está inválido"));
 	}
 
+	/**
+	 * Nao deve aceitar site com acento.
+	 */
 	@Test
 	public void nao_deve_aceitar_site_com_acento() {
 		empresa.setSite("http://www.gbcômacênto.com.br");
 		assertFalse(isValid(empresa, "O site da empresa está inválido"));
 	}
 
+	/**
+	 * Nao deve aceitar site com cedilha.
+	 */
 	@Test
 	public void nao_deve_aceitar_site_com_cedilha() {
 		empresa.setSite("http://www.conceiçãocostureira.com.br");
 		assertFalse(isValid(empresa, "O site da empresa está inválido"));
 	}
 
+	/**
+	 * Nao deve aceitar site com espaco.
+	 */
 	@Test
 	public void nao_deve_aceitar_site_com_espaco() {
 		empresa.setSite("http://www.gb consertos.com.br");
 		assertFalse(isValid(empresa, "O site da empresa está inválido"));
 	}
 
+	/**
+	 * Nao deve aceitar site com arroba.
+	 */
 	@Test
 	public void nao_deve_aceitar_site_com_arroba() {
 		empresa.setSite("http://www.gbc@nsert@s.com.br");
@@ -272,6 +314,9 @@ public class EmpresaTest {
 		assertFalse(isValid(empresa, "O telefone da empresa não pode ser nulo"));
 	}
 	
+	/**
+	 * Nao deve aceitar telefone vazio.
+	 */
 	@Test
 	public void nao_deve_aceitar_telefone_vazio() {
 		empresa.setTelefones(new HashSet<Telefone>());
@@ -318,6 +363,9 @@ public class EmpresaTest {
 		assertTrue(empresa.getEndereco().equals(empresa.getEndereco()));
 	}
 	
+	/**
+	 * Nao deve aceitar endereco vazio.
+	 */
 	@Test
 	public void nao_deve_aceitar_endereco_vazio() {
 		empresa.setEnderecos(new HashSet<Endereco>());

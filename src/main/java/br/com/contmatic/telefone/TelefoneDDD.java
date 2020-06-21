@@ -2,6 +2,8 @@ package br.com.contmatic.telefone;
 
 /**
  * The Enum TelefoneDDD.
+ * 
+ * @author gabriel.santos
  */
 public enum TelefoneDDD {
         

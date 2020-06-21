@@ -2,6 +2,8 @@ package br.com.contmatic.util;
 
 /**
  * The Class RegexType.
+ * 
+ * @author gabriel.santos
  */
 public final class RegexType {
 

@@ -30,6 +30,8 @@ import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
 /**
  * The Class TelefoneTest.
+ * 
+ * @author gabriel.santos
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TelefoneTest {
@@ -68,6 +70,13 @@ public class TelefoneTest {
         this.validator = factory.getValidator();
     }
     
+    /**
+     * Checks if is valid.
+     *
+     * @param telefone the telefone
+     * @param mensagem the mensagem
+     * @return true, if is valid
+     */
     public boolean isValid(Telefone telefone, String mensagem) {
 		validator = factory.getValidator();
 		boolean valido = true;
@@ -134,29 +143,44 @@ public class TelefoneTest {
         assertThat(telefone.getNumero(), containsString("927219389"));
     }
     
+    /**
+     * Nao deve aceitar espacos em branco no numero.
+     */
     @Test
     public void nao_deve_aceitar_espacos_em_branco_no_numero() {
         assertFalse(telefone.getNumero().trim().isEmpty());
     }
     
+    /**
+     * Deve aceitar numero valido.
+     */
     @Test
 	public void deve_aceitar_numero_valido() {
 		telefone.setNumero("946756054");
 		assertTrue(isValid(telefone, "O campo Numero está invalido"));
 	}
     
+    /**
+     * Nao deve aceitar numero com espaço.
+     */
     @Test
 	public void nao_deve_aceitar_numero_com_espaço() {
 		telefone.setNumero("94675 6054");
 		assertFalse(isValid(telefone, "O campo Numero está invalido"));
 	}
     
+    /**
+     * Nao deve aceitar letras no numero.
+     */
     @Test
 	public void nao_deve_aceitar_letras_no_numero() {
 		telefone.setNumero("94675G054");
 		assertFalse(isValid(telefone, "O campo Numero está invalido"));
 	}
     
+    /**
+     * Nao deve aceitar caracter especial no numero.
+     */
     @Test
 	public void nao_deve_aceitar_caracter_especial_no_numero() {
 		telefone.setNumero("94675@#$4");

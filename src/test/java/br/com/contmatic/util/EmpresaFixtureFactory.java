@@ -20,6 +20,8 @@ import br.com.six2six.fixturefactory.loader.TemplateLoader;
 
 /**
  * A factory for creating EmpresaFixture objects.
+ * 
+ * @author gabriel.santos
  */
 public class EmpresaFixtureFactory implements TemplateLoader {
 

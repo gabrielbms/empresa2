@@ -47,7 +47,6 @@ public class FornecedorTest {
     /** The factory. */
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
-
     /**
      * Set up before class.
      */
@@ -66,6 +65,13 @@ public class FornecedorTest {
         this.validator = factory.getValidator();
     }
     
+    /**
+     * Checks if is valid.
+     *
+     * @param fornecedor the fornecedor
+     * @param mensagem the mensagem
+     * @return true, if is valid
+     */
     public boolean isValid(Fornecedor fornecedor, String mensagem) {
 		validator = factory.getValidator();
 		boolean valido = true;
@@ -143,6 +149,9 @@ public class FornecedorTest {
         assertFalse(violations.isEmpty());
     }
     
+    /**
+     * Deve aceitar nome valido.
+     */
     @Test
 	public void deve_aceitar_nome_valido() {
     	fornecedor.setNome("Gabriel");
@@ -157,30 +166,45 @@ public class FornecedorTest {
         assertFalse(fornecedor.getNome().trim().isEmpty());
     }
     
+	/**
+	 * Deve aceitar nome sem espaco.
+	 */
 	@Test
 	public void deve_aceitar_nome_sem_espaco() {
 		fornecedor.setNome("GabrielBueno");
 		assertTrue(isValid(fornecedor, "O nome do fornecedor está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar nome com acento.
+	 */
 	@Test
 	public void deve_aceitar_nome_com_acento() {
 		fornecedor.setNome("João");
 		assertTrue(isValid(fornecedor, "O nome do fornecedor está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar nome com cedilha.
+	 */
 	@Test
 	public void deve_aceitar_nome_com_cedilha() {
 		fornecedor.setNome("Maria Conceição");
 		assertTrue(isValid(fornecedor, "O nome do fornecedor está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar nome com espaco.
+	 */
 	@Test
 	public void deve_aceitar_nome_com_espaco() {
 		fornecedor.setNome("Gabriel Bueno");
 		assertTrue(isValid(fornecedor, "O nome do fornecedor está incorreto"));
 	}
 
+	/**
+	 * Nao deve aceitar nome com arroba.
+	 */
 	@Test
 	public void nao_deve_aceitar_nome_com_arroba() {
 		fornecedor.setNome("G@briel");
@@ -223,24 +247,36 @@ public class FornecedorTest {
         assertFalse(fornecedor.getProduto().trim().isEmpty());
     }
     
+    /**
+     * Deve aceitar produto sem espaco.
+     */
     @Test
 	public void deve_aceitar_produto_sem_espaco() {
     	fornecedor.setProduto("Placamãe");
 		assertTrue(isValid(fornecedor, "O nome do produto está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar produto com acento.
+	 */
 	@Test
 	public void deve_aceitar_produto_com_acento() {
 		fornecedor.setProduto("placa mãe");
 		assertTrue(isValid(fornecedor, "O nome do produto está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar produto com cedilha.
+	 */
 	@Test
 	public void deve_aceitar_produto_com_cedilha() {
 		fornecedor.setProduto("ççç");
 		assertTrue(isValid(fornecedor, "O nome do produto está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar produto com espaco.
+	 */
 	@Test
 	public void deve_aceitar_produto_com_espaco() {
 		fornecedor.setProduto("Processador AMD FX 6300");

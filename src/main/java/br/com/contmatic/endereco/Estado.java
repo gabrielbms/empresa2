@@ -2,6 +2,8 @@ package br.com.contmatic.endereco;
 
 /**
  * The Enum Estado.
+ * 
+ * @author gabriel.santos
  */
 public enum Estado {
     

@@ -34,6 +34,8 @@ import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
 /**
  * The Class ClienteTest.
+ * 
+ * @author gabriel.santos
  */
 @FixMethodOrder(NAME_ASCENDING)
 public class ClienteTest {
@@ -44,6 +46,7 @@ public class ClienteTest {
     /** The validator. */
     private Validator validator;
     
+    /** The factory. */
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
     /**
@@ -64,6 +67,13 @@ public class ClienteTest {
         this.validator = factory.getValidator();
     }
     
+    /**
+     * Checks if is valid.
+     *
+     * @param cliente the cliente
+     * @param mensagem the mensagem
+     * @return true, if is valid
+     */
     public boolean isValid(Cliente cliente, String mensagem) {
 		validator = factory.getValidator();
 		boolean valido = true;
@@ -141,6 +151,9 @@ public class ClienteTest {
         assertFalse(violations.isEmpty());
     }
     
+    /**
+     * Deve aceitar nome valido.
+     */
     @Test
 	public void deve_aceitar_nome_valido() {
     	cliente.setNome("Gabriel");
@@ -155,30 +168,45 @@ public class ClienteTest {
         assertFalse(cliente.getNome().trim().isEmpty());
     }
     
+    /**
+     * Deve aceitar nome sem espaco.
+     */
     @Test
 	public void deve_aceitar_nome_sem_espaco() {
     	cliente.setNome("GabrielBueno");
 		assertTrue(isValid(cliente, "O nome do cliente está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar nome com acento.
+	 */
 	@Test
 	public void deve_aceitar_nome_com_acento() {
 		cliente.setNome("João");
 		assertTrue(isValid(cliente, "O nome do cliente está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar nome com cedilha.
+	 */
 	@Test
 	public void deve_aceitar_nome_com_cedilha() {
 		cliente.setNome("Maria Conceição");
 		assertTrue(isValid(cliente, "O nome do cliente está incorreto"));
 	}
 
+	/**
+	 * Deve aceitar nome com espaco.
+	 */
 	@Test
 	public void deve_aceitar_nome_com_espaco() {
 		cliente.setNome("Gabriel Bueno");
 		assertTrue(isValid(cliente, "O nome do cliente está incorreto"));
 	}
 
+	/**
+	 * Nao deve aceitar nome com arroba.
+	 */
 	@Test
 	public void nao_deve_aceitar_nome_com_arroba() {
 		cliente.setNome("G@briel");
@@ -230,18 +258,27 @@ public class ClienteTest {
         assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getEmail()));
     }
 
+	/**
+	 * Nao deve aceitar email com acento.
+	 */
 	@Test
 	public void nao_deve_aceitar_email_com_acento() {
     	cliente.setEmail("joãolindão@bol.com.br");
 		assertFalse(isValid(cliente, "O email do cliente está invalido"));
 	} 
 
+	/**
+	 * Nao deve aceita email com cedilha.
+	 */
 	@Test
 	public void nao_deve_aceita_email_com_cedilha() {
     	cliente.setEmail("maria_conceição@uol.com.br");
     	assertFalse(isValid(cliente, "O email do cliente está invalido"));
 	} 
 
+	/**
+	 * Nao deve aceitar email com espaco.
+	 */
 	@Test
 	public void nao_deve_aceitar_email_com_espaco() {
     	cliente.setEmail("email com espaços@gmail.com");
@@ -259,6 +296,9 @@ public class ClienteTest {
 		assertFalse(isValid(cliente, "O telefone do cliente não pode ser vazio"));
 	}
 	
+	/**
+	 * Nao deve aceitar telefone vazio.
+	 */
 	@Test
 	public void nao_deve_aceitar_telefone_vazio() {
 		cliente.setTelefones(new HashSet<Telefone>());
@@ -313,18 +353,27 @@ public class ClienteTest {
         assertThat(cliente.getBoleto(), is(BigDecimal.valueOf(250.00)));
     }
     
+    /**
+     * Nao deve aceitar boleto negativo.
+     */
     @Test(expected = IllegalArgumentException.class)
 	public void nao_deve_aceitar_boleto_negativo() {
     	cliente.setBoleto(BigDecimal.valueOf(-200.00));
 		assertFalse(cliente.getBoleto() == BigDecimal.valueOf(-200.00));
 	}
     
+    /**
+     * Nao deve aceitar boleto igual a 0.
+     */
     @Test(expected = IllegalArgumentException.class)
 	public void nao_deve_aceitar_boleto_igual_a_0() {
     	cliente.setBoleto(BigDecimal.valueOf(0.00));
 		assertFalse(cliente.getBoleto() == BigDecimal.valueOf(0.00));
 	}
     
+    /**
+     * Deve aceitar boleto valido.
+     */
     @Test
 	public void deve_aceitar_boleto_valido() {
     	cliente.setBoleto(BigDecimal.valueOf(200.00));

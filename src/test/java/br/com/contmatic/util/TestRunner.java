@@ -13,6 +13,8 @@ import br.com.contmatic.telefone.TelefoneTest;
 
 /**
  * The Class TestRunner.
+ * 
+ * @author gabriel.santos
  */
 @RunWith(Suite.class)
 @SuiteClasses({ ClienteTest.class, EmpresaTest.class, FornecedorTest.class, FuncionarioTest.class, EnderecoTest.class, TelefoneTest.class })
