@@ -45,9 +45,9 @@ public class EmpresaTest {
 
 	/** The validator. */
 	private Validator validator;
-	
+
 	/** The factory. */
-    private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+	private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
 	/**
 	 * Set up before class.
@@ -66,11 +66,11 @@ public class EmpresaTest {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		this.validator = factory.getValidator();
 	}
-	
+
 	/**
 	 * Checks if is valid.
 	 *
-	 * @param empresa the empresa
+	 * @param empresa  the empresa
 	 * @param mensagem the mensagem
 	 * @return true, if is valid
 	 */
@@ -83,9 +83,9 @@ public class EmpresaTest {
 				valido = false;
 		return valido;
 	}
-	
+
 	/* TESTES NO CNPJ */
-	
+
 	/**
 	 * Nao deve aceitar cnpj nulo.
 	 */
@@ -93,7 +93,7 @@ public class EmpresaTest {
 	public void nao_deve_aceitar_cnpj_nulo() {
 		assertNotNull(empresa.getCnpj());
 	}
-	
+
 	/**
 	 * Deve testar o get cnpj esta funcionando corretamente.
 	 */
@@ -102,7 +102,7 @@ public class EmpresaTest {
 		empresa.setCnpj("35667373000103");
 		assertThat(empresa.getCnpj(), containsString("35667373000103"));
 	}
-	
+
 	/**
 	 * Nao deve aceitar espacos em branco no cnpj.
 	 */
@@ -110,7 +110,7 @@ public class EmpresaTest {
 	public void nao_deve_aceitar_espacos_em_branco_no_cnpj() {
 		assertFalse(empresa.getCnpj().trim().isEmpty());
 	}
-	
+
 	/**
 	 * Deve validar cnpj annotations.
 	 */
@@ -119,9 +119,9 @@ public class EmpresaTest {
 		Empresa cadastroValidator = Fixture.from(Empresa.class).gimme("valido");
 		assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getCnpj()));
 	}
-	
+
 	/* TESTES NO NOME */
-	
+
 	/**
 	 * Nao deve aceitar nome nulo.
 	 */
@@ -130,7 +130,7 @@ public class EmpresaTest {
 		empresa.setNome(null);
 		assertFalse(isValid(empresa, "O campo nome não pode estar vazio"));
 	}
-	
+
 	/**
 	 * Deve testar o get nome esta funcionando corretamente.
 	 */
@@ -139,7 +139,7 @@ public class EmpresaTest {
 		empresa.setNome("GB computadores");
 		assertThat(empresa.getNome(), containsString("GB computadores"));
 	}
-	
+
 	/**
 	 * Nao deve aceitar nome curto.
 	 */
@@ -150,7 +150,7 @@ public class EmpresaTest {
 		Set<ConstraintViolation<Empresa>> violations = validator.validate(Empresa);
 		assertFalse(violations.isEmpty());
 	}
-	
+
 	/**
 	 * Deve aceitar nome valido.
 	 */
@@ -159,7 +159,7 @@ public class EmpresaTest {
 		empresa.setNome("Gabriel");
 		assertTrue(isValid(empresa, "O campo nome não pode estar vazio"));
 	}
-	
+
 	/**
 	 * Nao deve aceitar espacos em branco no nome.
 	 */
@@ -167,7 +167,7 @@ public class EmpresaTest {
 	public void nao_deve_aceitar_espacos_em_branco_no_nome() {
 		assertFalse(empresa.getNome().trim().isEmpty());
 	}
-	
+
 	/**
 	 * Deve aceitar nome sem espaco.
 	 */
@@ -212,7 +212,7 @@ public class EmpresaTest {
 		empresa.setNome("G@briel");
 		assertFalse(isValid(empresa, "O nome da empresa está incorreto"));
 	}
-	
+
 	/**
 	 * Deve validar nome annotations.
 	 */
@@ -221,9 +221,9 @@ public class EmpresaTest {
 		Empresa cadastroValidator = Fixture.from(Empresa.class).gimme("valido");
 		assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getNome()));
 	}
-	
+
 	/* TESTES NO SITE */
-	
+
 	/**
 	 * Nao deve aceitar site nulo.
 	 */
@@ -232,7 +232,7 @@ public class EmpresaTest {
 		empresa.setSite("gbconsertos.net");
 		assertNotNull(empresa.getNome());
 	}
-	
+
 	/**
 	 * Deve testar o set site esta funcionando corretamente.
 	 */
@@ -240,7 +240,7 @@ public class EmpresaTest {
 	public void deve_testar_o_getSite_esta_funcionando_corretamente() {
 		assertTrue(empresa.getSite().equals("http://www.gbconsertos.com.br"));
 	}
-	
+
 	/**
 	 * Nao deve aceitar espacos em branco no site.
 	 */
@@ -248,7 +248,7 @@ public class EmpresaTest {
 	public void nao_deve_aceitar_espacos_em_branco_no_site() {
 		assertFalse(empresa.getSite().trim().isEmpty());
 	}
-	
+
 	/**
 	 * Deve aceitar site valido.
 	 */
@@ -293,7 +293,7 @@ public class EmpresaTest {
 		empresa.setSite("http://www.gbc@nsert@s.com.br");
 		assertFalse(isValid(empresa, "O site da empresa está inválido"));
 	}
-	
+
 	/**
 	 * Deve validar site annotations.
 	 */
@@ -302,9 +302,9 @@ public class EmpresaTest {
 		Empresa cadastroValidator = Fixture.from(Empresa.class).gimme("valido");
 		assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getSite()));
 	}
-	
+
 	/* TESTES NO TELEFONE */
-	
+
 	/**
 	 * Nao deve aceitar telefone nulo.
 	 */
@@ -313,7 +313,7 @@ public class EmpresaTest {
 		empresa.setTelefones(null);
 		assertFalse(isValid(empresa, "O telefone da empresa não pode ser nulo"));
 	}
-	
+
 	/**
 	 * Nao deve aceitar telefone vazio.
 	 */
@@ -322,7 +322,7 @@ public class EmpresaTest {
 		empresa.setTelefones(new HashSet<Telefone>());
 		assertFalse(isValid(empresa, "os telefones da empresa não devem ser menor que um"));
 	}
-	
+
 	/**
 	 * Deve testar o set telefones.
 	 */
@@ -333,7 +333,7 @@ public class EmpresaTest {
 		empresa.setTelefones(telefone);
 		assertTrue(telefone.equals(telefone));
 	}
-	
+
 	/**
 	 * Deve validar telefones annotations.
 	 */
@@ -342,7 +342,7 @@ public class EmpresaTest {
 		Empresa cadastroValidator = Fixture.from(Empresa.class).gimme("valido");
 		assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getTelefone()));
 	}
-	
+
 	/* TESTES NO ENDERECO */
 
 	/**
@@ -353,7 +353,7 @@ public class EmpresaTest {
 		empresa.setEnderecos(null);
 		assertFalse(isValid(empresa, "O endereço da empresa está vazio"));
 	}
-	
+
 	/**
 	 * Deve testar o set endereco esta funcionando corretamente.
 	 */
@@ -362,7 +362,7 @@ public class EmpresaTest {
 		empresa.getEndereco();
 		assertTrue(empresa.getEndereco().equals(empresa.getEndereco()));
 	}
-	
+
 	/**
 	 * Nao deve aceitar endereco vazio.
 	 */
@@ -371,7 +371,7 @@ public class EmpresaTest {
 		empresa.setEnderecos(new HashSet<Endereco>());
 		assertFalse(isValid(empresa, "Tem que cadastrar pelo menos um endereço"));
 	}
-	
+
 	/**
 	 * Deve testar o set enderecos.
 	 */
@@ -382,7 +382,7 @@ public class EmpresaTest {
 		empresa.setEnderecos(endereco);
 		assertTrue(endereco.equals(endereco));
 	}
-	
+
 	/**
 	 * Deve validar enderecos annotations.
 	 */
@@ -391,7 +391,7 @@ public class EmpresaTest {
 		Empresa cadastroValidator = Fixture.from(Empresa.class).gimme("valido");
 		assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getEndereco()));
 	}
-	
+
 	/* OUTROS TESTES */
 
 	/**

@@ -47,10 +47,10 @@ public class EnderecoTest {
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
     /**
-     * Inicio dos testes.
+     * Set up before class.
      */
     @BeforeClass
-    public static void InicioDosTestes() {
+    public static void setUpBeforeClass() {
         FixtureFactoryLoader.loadTemplates("br.com.contmatic.util");
     }
 
