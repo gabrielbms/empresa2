@@ -1,21 +1,11 @@
 package br.com.contmatic.telefone;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.Matchers.empty;
+import static br.com.contmatic.telefone.TelefoneDDDType.DDD11;
+import static br.com.contmatic.telefone.TelefoneType.CELULAR;
+import static br.com.contmatic.telefone.TelefoneType.FIXO;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotEquals;
 
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -24,7 +14,6 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import br.com.contmatic.util.Annotations;
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
@@ -38,18 +27,6 @@ public class TelefoneTest {
 
 	/** The telefone. */
 	private static Telefone telefone;
-
-	/** The telefone DDD. */
-	private static TelefoneDDD telefoneDDD;
-
-	/** The tipo telefone. */
-	private static TipoTelefone tipoTelefone;
-
-	/** The validator. */
-	private Validator validator;
-
-	/** The factory. */
-	private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
 	/**
 	 * Inicio dos testes.
@@ -65,221 +42,185 @@ public class TelefoneTest {
 	@Before
 	public void setUp() {
 		telefone = Fixture.from(Telefone.class).gimme("valido");
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		this.validator = factory.getValidator();
 	}
 
-	/**
-	 * Checks if is valid.
-	 *
-	 * @param telefone the telefone
-	 * @param mensagem the mensagem
-	 * @return true, if is valid
-	 */
-	public boolean isValid(Telefone telefone, String mensagem) {
-		validator = factory.getValidator();
-		boolean valido = true;
-		Set<ConstraintViolation<Telefone>> restricoes = validator.validate(telefone);
-		for (ConstraintViolation<Telefone> constraintViolation : restricoes)
-			if (constraintViolation.getMessage().equalsIgnoreCase(mensagem))
-				valido = false;
-		return valido;
-	}
-
-	/* TESTES NO DDD */
-
-	/**
-	 * Nao deve aceitar ddd nulo.
-	 */
 	@Test
-	public void nao_deve_aceitar_ddd_nulo() {
-		assertNotNull(telefone.getDdd());
+	public void deve_testar_se_o_numero_aceita_numeros() {
+		telefone.setNumero("937018888");
+		assertEquals("937018888", telefone.getNumero());
 	}
 
-	/**
-	 * Deve testar o get ddd esta funcionando corretamente.
-	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_null_no_numero() {
+		telefone.setNumero(null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_vazio_no_numero() {
+		telefone.setNumero("");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_espacos_em_branco_no_numero() {
+		telefone.setNumero("  ");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_letras_no_numero() {
+		telefone.setNumero("abcdefabcde");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_caracteres_especiais_no_numero() {
+		telefone.setNumero("@#$");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_espaco_no_inicio_do_numero() {
+		telefone.setNumero(" 43701888817");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_espaco_no_final_do_numero() {
+		telefone.setNumero("43701888817 ");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_espacos_no_meio_do_numero() {
+		telefone.setNumero("437018      88817");
+	}
+
 	@Test
-	public void deve_testar_o_getDdd_esta_funcionando_corretamente() {
-		telefoneDDD = TelefoneDDD.valueOf("DDD11");
-		assertTrue(telefoneDDD.getDdd() == 11);
+	public void deve_testar_o_setNumero() {
+		telefone.setNumero("437018888");
+		assertEquals("437018888", telefone.getNumero());
 	}
 
-	/**
-	 * Deve testar o get complemento esta funcionando corretamente.
-	 */
-	@Test
-	public void deve_testar_o_getComplemento_esta_funcionando_corretamente() {
-		telefoneDDD = TelefoneDDD.valueOf("DDD11");
-		assertTrue(telefoneDDD.getComplemento().equals("São Paulo – SP"));
+	@Test(expected = IllegalArgumentException.class)
+	public void deve_testar_exception_do_setCpf_tamanho_menor() {
+		telefone.setNumero("7777777");
 	}
 
-	/**
-	 * Deve validar ddd annotations.
-	 */
-	@Test
-	public void deve_validar_ddd_annotations() {
-		Telefone cadastroValidator = Fixture.from(Telefone.class).gimme("valido");
-		assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getDdd()));
+	@Test(expected = IllegalArgumentException.class)
+	public void deve_testar_exception_do_setCpf_tamanho_maior() {
+		telefone.setNumero("11111111111");
 	}
 
-	/* TESTES NO NUMERO */
-
-	/**
-	 * Nao deve aceitar numero nulo.
-	 */
-	@Test
-	public void nao_deve_aceitar_numero_nulo() {
-		assertNotNull(telefone.getNumero());
-	}
-
-	/**
-	 * Deve testar o get numero esta funcionando corretamente.
-	 */
 	@Test
 	public void deve_testar_o_getNumero_esta_funcionando_corretamente() {
-		telefone.setNumero("927219389");
-		assertThat(telefone.getNumero(), containsString("927219389"));
+		telefone.setNumero("946756084");
+		assertEquals("946756084", telefone.getNumero());
 	}
 
-	/**
-	 * Nao deve aceitar espacos em branco no numero.
-	 */
 	@Test
-	public void nao_deve_aceitar_espacos_em_branco_no_numero() {
-		assertFalse(telefone.getNumero().trim().isEmpty());
+	public void deve_testar_se_o_valida_tipo_telefone_esta_funcionando() {
+		telefone.setNumero("27219689");
+		assertEquals(FIXO, telefone.getTipoTelefone());
 	}
 
-	/**
-	 * Deve aceitar numero valido.
-	 */
 	@Test
-	public void deve_aceitar_numero_valido() {
-		telefone.setNumero("946756054");
-		assertTrue(isValid(telefone, "O campo Numero está invalido"));
+	public void deve_retornar_true_no_hashCode_com_telefones_iguais() {
+		Telefone telefone1 = new Telefone(DDD11, "978457845", CELULAR);
+		Telefone telefone2 = new Telefone(DDD11, "978457845", CELULAR);
+		assertEquals(telefone1.hashCode(), telefone2.hashCode());
 	}
 
-	/**
-	 * Nao deve aceitar numero com espaço.
-	 */
-	@Test
-	public void nao_deve_aceitar_numero_com_espaço() {
-		telefone.setNumero("94675 6054");
-		assertFalse(isValid(telefone, "O campo Numero está invalido"));
+	@Test(expected = IllegalArgumentException.class)
+	public void deve_retornar_false_no_hashCode_com_um_telefone_de_numero_null() {
+		Telefone outroTelefone = new Telefone(DDD11, null, CELULAR);
+		assertNotEquals(telefone.hashCode(), outroTelefone.hashCode());
 	}
 
-	/**
-	 * Nao deve aceitar letras no numero.
-	 */
 	@Test
-	public void nao_deve_aceitar_letras_no_numero() {
-		telefone.setNumero("94675G054");
-		assertFalse(isValid(telefone, "O campo Numero está invalido"));
+	public void deve_retornar_true_no_equals_com_telefones_iguais() {
+		Telefone telefone1 = new Telefone(DDD11, "978457845", CELULAR);
+		Telefone telefone2 = new Telefone(DDD11, "978457845", CELULAR);
+		assertEquals(telefone1, telefone2);
 	}
 
-	/**
-	 * Nao deve aceitar caracter especial no numero.
-	 */
-	@Test
-	public void nao_deve_aceitar_caracter_especial_no_numero() {
-		telefone.setNumero("94675@#$4");
-		assertFalse(isValid(telefone, "O campo Numero está invalido"));
+	@Test(expected = IllegalArgumentException.class)
+	public void deve_retornar_false_no_equals_com_um_telefone_de_numero_null() {
+		Telefone outroTelefone = new Telefone(DDD11, null, CELULAR);
+		assertNotEquals(telefone, outroTelefone);
 	}
 
-	/**
-	 * Deve validar numero annotations.
-	 */
 	@Test
-	public void deve_validar_numero_annotations() {
-		Telefone cadastroValidator = Fixture.from(Telefone.class).gimme("valido");
-		assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getNumero()));
+	public void deve_retornar_true_no_equals_comparando_um_telefone_com_ele_mesmo() {
+		assertEquals(telefone, telefone);
 	}
 
-	/* TESTES NO TIPO TELEFONE */
-
-	/**
-	 * Deve testar o get descricao esta funcionando corretameante.
-	 */
 	@Test
-	public void deve_testar_o_getDescricao_esta_funcionando_corretameante() {
-		tipoTelefone = TipoTelefone.CELULAR;
-		assertTrue(tipoTelefone.getDescricao().equals("Celular"));
+	public void deve_retornar_false_no_equals_comparando_um_telefone_com_null() {
+		assertNotEquals(telefone, null);
 	}
 
-	/**
-	 * Deve testar o get tamanho esta funcionando corretameante.
-	 */
-	@Test
-	public void deve_testar_o_getTamanho_esta_funcionando_corretameante() {
-		tipoTelefone = TipoTelefone.CELULAR;
-		assertTrue(tipoTelefone.getTamanho() == 9);
+	@Test(expected = IllegalArgumentException.class)
+	public void deve_retornar_true_no_equals_comparando_dois_telefone_de_numero_null() {
+		Telefone telefone1 = new Telefone(DDD11, null, CELULAR);
+		Telefone telefone2 = new Telefone(DDD11, null, CELULAR);
+		assertEquals(telefone1, telefone2);
 	}
 
-	/**
-	 * Deve validar tipo telefone annotations.
-	 */
 	@Test
-	public void deve_validar_tipo_telefone_annotations() {
-		Telefone cadastroValidator = Fixture.from(Telefone.class).gimme("valido");
-		assertFalse(Annotations.MensagemErroAnnotation(cadastroValidator.getTelefone()));
+	public void deve_retornar_false_no_equals_com_telefone_de_numeros_diferentes() {
+		Telefone outroTelefone = new Telefone(DDD11, "978457857", CELULAR);
+		assertNotEquals(telefone, outroTelefone);
 	}
 
-	/**
-	 * Nao deve aceitar telefone nulo.
-	 */
 	@Test
-	public void nao_deve_aceitar_telefone_nulo() {
-		assertNotNull(telefone.getTelefone());
+	public void deve_retornar_false_no_equals_com_telefone_e_um_objeto_aleatorio() {
+		assertNotEquals(telefone, new Object());
 	}
 
-	/* OUTROS TESTES */
-
-	/**
-	 * Deve gerar dados validos.
-	 */
-	@Test
-	public void deve_gerar_dados_validos() {
-		Set<ConstraintViolation<Telefone>> constraintViolations = validator.validate(telefone);
-		assertEquals(0, constraintViolations.size());
+	@Test(expected = IllegalArgumentException.class)
+	public void toString_deve_retornar_null() {
+		Telefone telefoneNull = new Telefone(null, null, null);
+		String telefoneNullToString = telefoneNull.toString();
+		assertEquals(telefoneNull.toString(), telefoneNullToString);
 	}
 
-	/**
-	 * Nao deve aceitar cliente sem cpf nome telefone boleto.
-	 */
 	@Test
-	public void nao_deve_aceitar_cliente_sem_cpf_nome_telefone_boleto() {
-		Telefone telefone = new Telefone();
-		Set<ConstraintViolation<Telefone>> restricoes = validator.validate(telefone);
-		assertThat(restricoes, Matchers.hasSize(0));
+	public void toString_deve_retornar_preenchido() {
+		String telefoneToString = telefone.toString();
+		assertEquals(telefoneToString, telefone.toString());
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void deve_tentar_setar_o_contrutor_null() {
+		Telefone outroTelefone = new Telefone(null, null, null);
+		assertEquals(null, outroTelefone);
 	}
 
-	/**
-	 * Deve passar na validacao com cpf nome telefone boleto informados.
-	 */
 	@Test
-	public void deve_passar_na_validacao_com_cpf_nome_telefone_boleto_informados() {
-		telefone = Fixture.from(Telefone.class).gimme("valido");
-		Set<ConstraintViolation<Telefone>> restricoes = validator.validate(telefone);
-		assertThat(restricoes, empty());
+	public void deve_testar_o_getDdd_do_TelefoneDDDType() {
+		TelefoneDDDType telefoneDDD = DDD11;
+		assertEquals(11, telefoneDDD.getDdd());
+
 	}
 
-	/**
-	 * Deve retornar false no hash code com um endereco de numero null.
-	 */
 	@Test
-	public void deve_retornar_false_no_hashCode_com_um_endereco_de_numero_null() {
-		Telefone telefone2 = new Telefone(null, null, null);
-		assertFalse(telefone.hashCode() == telefone2.hashCode());
+	public void deve_testar_o_getComplemento_do_TelefoneDDDType() {
+		TelefoneDDDType telefoneDddComplemento = DDD11;
+		assertEquals("São Paulo – SP", telefoneDddComplemento.getComplemento());
 	}
 
-	/**
-	 * Deve retornar true no equals comparando dois enderecos de cep null.
-	 */
 	@Test
-	public void deve_retornar_true_no_equals_comparando_dois_enderecos_de_cep_null() {
-		Telefone telefone1 = new Telefone(null, null, null);
-		Telefone telefone2 = new Telefone(null, null, null);
-		assertTrue(telefone1.equals(telefone2));
+	public void deve_testar_o_getDescricao_do_TipoTelefoneType() {
+		TelefoneType telefoneDescricao = CELULAR;
+		assertEquals("Celular", telefoneDescricao.getDescricao());
+
+	}
+
+	@Test
+	public void deve_testar_o_getTamanho_do_TipoTelefoneType() {
+		TelefoneType telefoneDescricao = CELULAR;
+		assertEquals(9, telefoneDescricao.getTamanho());
+	}
+	
+	@Test
+	public void deve_testar_o_getDdd() {
+		telefone.setDdd(DDD11);
+		assertEquals(DDD11, telefone.getDdd());
 	}
 
 	/**

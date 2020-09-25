@@ -5,7 +5,7 @@ package br.com.contmatic.telefone;
  * 
  * @author gabriel.santos
  */
-public enum TelefoneDDD {
+public enum TelefoneDDDType {
 
 	/** The ddd11. */
 	DDD11(11, "São Paulo – SP"),
@@ -214,7 +214,7 @@ public enum TelefoneDDD {
 	 * @param ddd         the ddd
 	 * @param complemento the complemento
 	 */
-	TelefoneDDD(int ddd, String complemento) {
+	TelefoneDDDType(int ddd, String complemento) {
 		this.ddd = ddd;
 		this.complemento = complemento;
 	}

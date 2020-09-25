@@ -5,7 +5,7 @@ package br.com.contmatic.telefone;
  * 
  * @author gabriel.santos
  */
-public enum TipoTelefone {
+public enum TelefoneType {
 
 	/** The celular. */
 	CELULAR("Celular", 9),
@@ -25,7 +25,7 @@ public enum TipoTelefone {
 	 * @param descricao the descricao
 	 * @param tamanho   the tamanho
 	 */
-	private TipoTelefone(String descricao, int tamanho) {
+	private TelefoneType(String descricao, int tamanho) {
 		this.descricao = descricao;
 		this.tamanho = tamanho;
 	}
