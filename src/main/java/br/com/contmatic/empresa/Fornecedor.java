@@ -1,17 +1,35 @@
 package br.com.contmatic.empresa;
 
+import static br.com.contmatic.util.Constantes.CNPJ_INCORRETO;
+import static br.com.contmatic.util.Constantes.CNPJ_INVALIDO;
 import static br.com.contmatic.util.Constantes.CNPJ_SIZE;
 import static br.com.contmatic.util.Constantes.CNPJ_VAZIO;
+import static br.com.contmatic.util.Constantes.CPF_INVALIDO;
+import static br.com.contmatic.util.Constantes.ENDERECO_QTDE_MAX;
+import static br.com.contmatic.util.Constantes.ENDERECO_QTDE_MINIMA;
+import static br.com.contmatic.util.Constantes.ENDERECO_SIZE_MAX;
 import static br.com.contmatic.util.Constantes.ENDERECO_VAZIO;
+import static br.com.contmatic.util.Constantes.NOME_INCORRETO;
+import static br.com.contmatic.util.Constantes.NOME_INVALIDO;
 import static br.com.contmatic.util.Constantes.NOME_MAX_SIZE;
 import static br.com.contmatic.util.Constantes.NOME_MIN_SIZE;
+import static br.com.contmatic.util.Constantes.NOME_TAMANHO;
 import static br.com.contmatic.util.Constantes.NOME_VAZIO;
+import static br.com.contmatic.util.Constantes.PRODUTO_INCORRETO;
+import static br.com.contmatic.util.Constantes.PRODUTO_INVALIDO;
 import static br.com.contmatic.util.Constantes.PRODUTO_VAZIO;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_CNPJ_GRANDE_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_CNPJ_PEQUENO_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_NOME_GRANDE_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_NOME_PEQUENO_DEMAIS;
+import static br.com.contmatic.util.Constantes.TELEFONE_QTDE_MAX;
+import static br.com.contmatic.util.Constantes.TELEFONE_QTDE_MINIMA;
+import static br.com.contmatic.util.Constantes.TELEFONE_SIZE_MAX;
 import static br.com.contmatic.util.Constantes.TELEFONE_VAZIO;
+import static br.com.contmatic.util.RegexType.LETRAS;
+import static br.com.contmatic.util.RegexType.NUMEROS;
+import static br.com.contmatic.util.RegexType.validaSeNaoTemEspacosIncorretosECaracteresEspeciaos;
+import static br.com.contmatic.util.Validate.isNotCNPJ;
 
 import java.util.Set;
 
@@ -32,7 +50,6 @@ import com.google.common.base.Preconditions;
 
 import br.com.contmatic.endereco.Endereco;
 import br.com.contmatic.telefone.Telefone;
-import br.com.contmatic.util.RegexType;
 
 /**
  * The Class Fornecedor.
@@ -42,34 +59,35 @@ import br.com.contmatic.util.RegexType;
 public class Fornecedor {
 
 	/** The cnpj. */
-	@CNPJ(message = "O CNPJ do funcionario está inválido")
-	@NotBlank(message = "O campo CNPJ não pode estar nulo")
+	@CNPJ(message = CNPJ_INVALIDO)
+	@NotBlank(message = CNPJ_VAZIO)
+	@Pattern(regexp = NUMEROS, message = CNPJ_INCORRETO)
 	private String cnpj;
 
 	/** The nome. */
-	@NotBlank(message = "O campo nome não pode estar vazio")
-	@Pattern(regexp = RegexType.NOME, message = "O nome do fornecedor está incorreto")
-	@Size(min = 2, max = 100, message = "O nome mínimo é de {min} caracteres e no máximo de {max} caracteres")
+	@NotBlank(message = NOME_VAZIO)
+	@Pattern(regexp = LETRAS, message = NOME_INCORRETO)
+	@Size(min = 2, max = 100, message = NOME_TAMANHO)
 	private String nome;
 
 	/** The produto. */
-	@NotBlank(message = "O campo produto não pode estar nulo")
-	@Length(min = 2, max = 80, message = "Tamanho do produto invalido")
-	@Pattern(regexp = RegexType.NOME, message = "O nome do produto está incorreto")
+	@NotBlank(message = PRODUTO_VAZIO)
+	@Length(min = 2, max = 80, message = PRODUTO_INCORRETO)
+	@Pattern(regexp = LETRAS	, message = PRODUTO_INVALIDO)
 	private Set<Produto> produto;
 
 	/** The telefones. */
 	@Valid
-	@NotEmpty(message = "O telefone do fornecedor não pode ser vazio")
-	@Size.List({ @Size(min = 1, message = "os telefones do fornecedor não devem ser menor que um"),
-			@Size(max = 3, message = "O máximo de telefones que podem ser salvo totaliza {max} telefones") })
+	@NotEmpty(message = TELEFONE_VAZIO)
+	@Size.List({ @Size(min = 1, message = TELEFONE_QTDE_MINIMA),
+			@Size(max = 3, message = TELEFONE_QTDE_MAX) })
 	private Set<Telefone> telefones;
 
 	/** The enderecos. */
 	@Valid
-	@NotEmpty(message = "O endereço da empresa está vazio")
-	@Size.List({ @Size(min = 1, message = "Tem que cadastrar pelo menos um endereço"),
-			@Size(max = 3, message = "A quantidade máxima de endeços é {max} endereços") })
+	@NotEmpty(message = ENDERECO_VAZIO)
+	@Size.List({ @Size(min = 1, message = ENDERECO_QTDE_MINIMA),
+			@Size(max = 3, message =ENDERECO_QTDE_MAX) })
 	private Set<Endereco> enderecos;
 
 	/**
@@ -112,7 +130,21 @@ public class Fornecedor {
 
 	public void setCnpj(String cnpj) {
 		this.validaCnpjIncorreto(cnpj);
+		this.validaCnpjInvalido(cnpj);
+		this.validaEspacosIncorretosECaracteresEspeciais(cnpj);
 		this.cnpj = cnpj;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciais(String cnpj) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(cnpj)) {
+			throw new IllegalArgumentException(CPF_INVALIDO);
+		}
+	}
+	
+	private void validaCnpjInvalido(String cnpj) {
+		if (isNotCNPJ(cnpj)) {
+			throw new IllegalStateException(CNPJ_INVALIDO);
+		}
 	}
 	
 	private void validaCnpjIncorreto(String cnpj) {
@@ -145,7 +177,14 @@ public class Fornecedor {
 
 	public void setNome(String nome) {
 		this.validaNomeIncorreto(nome);
+		this.validaEspacosIncorretosECaracteresEspeciaisNoNome(nome);
 		this.nome = nome;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciaisNoNome(String nome) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(nome)) {
+			throw new IllegalArgumentException(NOME_INVALIDO);
+		}
 	}
 	
 	private void validaNomeIncorreto(String nome) {
@@ -192,7 +231,7 @@ public class Fornecedor {
 	}
 	
 	public void setTelefones(Set<Telefone> telefone) {
-		Preconditions.checkArgument(telefone.size() < 2, "Somente pode possuir um telefone");
+		Preconditions.checkArgument(telefone.size() < 2, TELEFONE_SIZE_MAX);
 		this.validaTelefoneNullo(telefone);
 		this.telefones = telefone;
 	}
@@ -208,7 +247,7 @@ public class Fornecedor {
 	}
 	
 	public void setEnderecos(Set<Endereco> endereco) {
-		Preconditions.checkArgument(endereco.size() < 2, "Somente pode possuir um endereco");
+		Preconditions.checkArgument(endereco.size() < 2, ENDERECO_SIZE_MAX);
 		this.validaEnderecoNullo(endereco);
 		this.enderecos = endereco;
 	}

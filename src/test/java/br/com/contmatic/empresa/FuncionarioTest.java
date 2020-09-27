@@ -2,6 +2,7 @@ package br.com.contmatic.empresa;
 
 import static br.com.contmatic.telefone.TelefoneDDDType.DDD11;
 import static br.com.contmatic.telefone.TelefoneType.CELULAR;
+import static br.com.contmatic.util.Constantes.NOME_INCORRETO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -13,6 +14,12 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -43,7 +50,12 @@ public class FuncionarioTest {
 	private Endereco endereco;
 	
 	private Set<Endereco> enderecos = new HashSet<>();
-
+	
+	/** The validator. */
+	private Validator validator;
+	
+	/** The factory. */
+	private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
 	/**
 	 * Set up before class.
@@ -65,6 +77,23 @@ public class FuncionarioTest {
 		enderecos.add(endereco);
 	}
 	
+	/**
+	 * Checks if is valid.
+	 *
+	 * @param cliente  the cliente
+	 * @param mensagem the mensagem
+	 * @return true, if is valid
+	 */
+	public boolean isValid(Funcionario funcionario, String mensagem) {
+		validator = factory.getValidator();
+		boolean valido = true;
+		Set<ConstraintViolation<Funcionario>> restricoes = validator.validate(funcionario);
+		for (ConstraintViolation<Funcionario> constraintViolation : restricoes)
+			if (constraintViolation.getMessage().equalsIgnoreCase(mensagem))
+				valido = false;
+		return valido;
+	}
+
 	@Test
 	public void deve_testar_se_o_cpf_aceita_numeros() {
 		funcionario.setCpf("43701888817");
@@ -153,9 +182,10 @@ public class FuncionarioTest {
 		funcionario.setNome("          ");
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void nao_deve_aceitar_numeros_no_nome() {
 		funcionario.setNome("123456");
+		assertFalse(isValid(funcionario, NOME_INCORRETO));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -280,7 +310,7 @@ public class FuncionarioTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void toString_deve_retornar_null() {
-		funcionario = new Funcionario(null, null, 0, null, null, new BigDecimal("1"));
+		funcionario = new Funcionario(null, null, null, null, null, null, null, null);
 		String funcionarioToString = funcionario.toString();
 		assertEquals(funcionario.toString(), funcionarioToString);
 	}
@@ -289,6 +319,25 @@ public class FuncionarioTest {
 	public void toString_deve_retornar_preenchido() {
 		String funcionarioToString = funcionario.toString();
 		assertEquals(funcionario.toString(), funcionarioToString);
+	}
+	
+	@Test
+	public void deve_testar_o_construtor_completo() {
+		Funcionario funcionarioCompleto = new Funcionario("43701888817", "Gabriel", 20, telefones, 
+				enderecos,  BigDecimal.valueOf(2500.00), new LocalDate(2021, 06, 06), new LocalDate(2021, 06, 06));
+		assertTrue(isValid(funcionarioCompleto, ""));
+	}
+	
+	@Test
+	public void deve_testar_o_getDataContratacao() {
+		funcionario.getDataContratacao();
+		assertEquals(funcionario.getDataSalario(), funcionario.getDataSalario());
+	}
+	
+	@Test
+	public void deve_testar_o_getDataSalario() {
+		funcionario.getDataSalario();
+		assertEquals(funcionario.getDataSalario(), funcionario.getDataSalario());
 	}
 
 	/**

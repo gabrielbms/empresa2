@@ -2,7 +2,33 @@ package br.com.contmatic.util;
 
 public final class Constantes {
 	
-public static final String CPF_INVALIDO = "O CPF informado não é valido.";
+	public static final String CPF_INVALIDO = "O CPF informado não é valido.";
+	
+	public static final String NOME_TAMANHO = "O nome mínimo é de {min} caracteres e no máximo de {max} caracteres";
+
+	public static final String EMAIL_INVALIDO =  "O email do cliente está invalido";
+	
+	public static final String EMAIL_VAZIO = "O campo e-mail não pode estar vazio";
+	
+	public static final String EMAIL_TAMANHO = "O e-mail do funcionario pode ter no máximo {max} caracteres";
+	
+	public static final String TELEFONE_VAZIO = "O telefone do cliente não pode ser vazio";
+	
+	public static final String TELEFONE_QTDE_MINIMA = "os telefones do cliente não devem ser menor que um";
+	
+	public static final String TELEFONE_QTDE_MAX = "O máximo de telefones que podem ser salvo totaliza {max} telefones";
+	
+	public static final String ENDERECO_QTDE_MINIMA = "os enderecos do cliente não devem ser menor que um";
+	
+	public static final String ENDERECO_QTDE_MAX = "O máximo de enderecos que podem ser salvo totaliza {max} telefones";
+	
+	public static final String BOLETO_NEGATIVO = "O valor do boleto não pode ser negativo";
+	
+	public static final String BOLETO_VAZIO = "O campo boleto não pode estar vazio";
+	
+	public static final String PRODUTO_INVALIDO = "Tamanho do produto invalido";
+	
+	public static final String PRODUTO_INCORRETO = "O nome do produto está incorreto";
 	
 	public static final String CPF_INCORRETO = "O CPF foi preenchido incorretamente."; 
 
@@ -11,6 +37,10 @@ public static final String CPF_INVALIDO = "O CPF informado não é valido.";
 	public static final String CNPJ_INCORRETO = "O CNPJ foi preenchido incorretamente.";
 
 	public static final String CEP_INVALIDO = "O CNPJ informado não é valido.";
+	
+	public static final String SITE_VAZIO = "O campo site não pode estar nulo";
+	
+	public static final String SITE_INVALIDO = "O site da empresa está inválido";
 	
 	public static final String NAO_ACEITA_LETRAS = "O campo não aceita letras (abc).";
 	
@@ -43,12 +73,8 @@ public static final String CPF_INVALIDO = "O CPF informado não é valido.";
 	public static final String TAMANHO_DO_NOME_GRANDE_DEMAIS = "O nome não cumpre o tamanho máximo de 80 caracteres.";
 
 	public static final String TELEFONE_INVALIDO = "O telefone informado não é valido.";
-	
-	public static final String TELEFONE_VAZIO = "O telefone não foi preenchido."; 
 
 	public static final String ENDERECO_INVALIDO = "O endereco informado não é valido.";
-
-	public static final String PRODUTO_INVALIDO = "O produto informado não é valido.";
 
 	public static final String IDADE_INVALIDO = "A idade informada não é valida.";
 
@@ -59,8 +85,6 @@ public static final String CPF_INVALIDO = "O CPF informado não é valido.";
 	public static final String SALARIO_INVALIDO = "O salário informado não é valido.";
 
 	public static final String BOLETO_INVALIDO = "O boleto informado não é valido.";
-	
-	public static final String BOLETO_NEGATIVO = "Boleto não pode ser menor que um."; 
 
 	public static final String RUA_INVALIDA = "A rua informada não é valida.";
 
@@ -73,6 +97,20 @@ public static final String CPF_INVALIDO = "O CPF informado não é valido.";
 	public static final String ESTADO_INVALIDO = "O estado informado não é valido.";
 	
 	public static final String ENDERECO_VAZIO = "O endereco não foi preenchido.";
+	
+	public static final String TELEFONE_SIZE_MAX = "Somente pode possuir um telefone";
+	
+	public static final String ENDERECO_SIZE_MAX = "Somente pode possuir um endereco";
+	
+	public static final String SALARIO_NEGATIVO = "O salário do funcionário não pode ser negativo";
+
+	public static final String DATA_CONTRATACAO_VAZIA = "A data de contratação do funcionario não deve estar nula";
+	 
+	public static final String DATA_CONTRATACAO_FUTURA = "A data de contratação não pode ser maior que a data atual";
+	 
+	public static final String DATA_SALARIO_FUTURA = "A data do salario deve ser maior que a data atual";
+	
+	public static final String DATA_SALARIO_NULA = "A data do salário do funcionario não deve estar nula";
 	
 	public static final String CEP_INCORRETO = "O CEP foi preenchido incorretamente.";
 	
@@ -94,8 +132,6 @@ public static final String CPF_INVALIDO = "O CPF informado não é valido.";
 	
 	public static final String PRODUTO_VAZIO = "O produto não foi preenchido.";
 	
-	public static final String ESTADO_VAZIO = "O estado não foi selecionado.";
-	
 	public static final String NUMERO_INCORRETO = "O numero foi preenchido incorretamente.";
 	
 	public static final String TAMANHO_DO_CPF_PEQUENO_DEMAIS = "O CPF não pode ter menos que 11 numeros.";
@@ -110,13 +146,9 @@ public static final String CPF_INVALIDO = "O CPF informado não é valido.";
 	
 	public static final String TAMANHO_DO_EMAIL_GRANDE_DEMAIS = "O email não pode ter mais que 90 caracteres.";
 	
-	public static final String EMAIL_VAZIO = "O email não pode estar vazio.";
-	
 	public static final String TAMANHO_DO_SITE_PEQUENO_DEMAIS = "O site não pode ter menos que 05 caracteres.";
 	
 	public static final String TAMANHO_DO_SITE_GRANDE_DEMAIS = "O site não pode ter mais que 60 caracteres.";
-	
-	public static final String SITE_VAZIO = "O site não pode estar vazio.";
 	
 	public static final String CPF_VAZIO = "O CPF não pode ser vazio ou nullo";
 	
@@ -127,6 +159,20 @@ public static final String CPF_INVALIDO = "O CPF informado não é valido.";
 	public static final String DDD_VAZIO = "O DDD foi preenchido incorretamente.";
 	
 	public static final String TIPO_TELEFONE_VAZIO = "O tipo telefone foi preenchido incorretamente.";
+	
+	public static final String CEP_VAZIO = "O campo cep não pode estar nulo ou vazio";
+
+	public static final String RUA_VAZIA = "O campo rua não pode estar nulo ou vazio";
+
+	public static final String NUMERO_VAZIO = "O campo numero não pode estar nulo ou vazio";
+
+	public static final String COMPLEMENTO_VAZIO = "O campo complemento não pode estar nulo ou vazio";
+
+	public static final String BAIRRO_VAZIO = "O campo bairro não pode estar nulo ou vazio";
+
+	public static final String CIDADE_VAZIO = "O campo cidade não pode estar nulo ou vazio";
+
+	public static final String ESTADO_VAZIO = "O campo estado não pode estar nulo ou vazio";
 	
 	public static final String TELEFONE_PREENCHIDO_INCORRETAMENTE = "O numero do telefone foi preenchido incorretamente.";
 

@@ -10,6 +10,11 @@ import static org.junit.runners.MethodSorters.NAME_ASCENDING;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -40,6 +45,12 @@ public class EmpresaTest {
 	private Endereco endereco;
 	
 	private Set<Endereco> enderecos = new HashSet<>();
+	
+	/** The validator. */
+	private Validator validator;
+	
+	/** The factory. */
+	private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
 	/**
 	 * Set up before class.
@@ -59,6 +70,23 @@ public class EmpresaTest {
 		telefones.add(telefone);
 		endereco = new Endereco("03208070", 79);
 		enderecos.add(endereco);
+	}
+	
+	/**
+	 * Checks if is valid.
+	 *
+	 * @param empresa  the empresa
+	 * @param mensagem the mensagem
+	 * @return true, if is valid
+	 */
+	public boolean isValid(Empresa empresa, String mensagem) {
+		validator = factory.getValidator();
+		boolean valido = true;
+		Set<ConstraintViolation<Empresa>> restricoes = validator.validate(empresa);
+		for (ConstraintViolation<Empresa> constraintViolation : restricoes)
+			if (constraintViolation.getMessage().equalsIgnoreCase(mensagem))
+				valido = false;
+		return valido;
 	}
 
 	@Test
@@ -152,11 +180,6 @@ public class EmpresaTest {
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void nao_deve_aceitar_numeros_no_nome() {
-		empresa.setNome("123456");
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
 	public void nao_deve_aceitar_caracteres_especiais_no_nome() {
 		empresa.setNome("@#$");
 	}
@@ -200,15 +223,54 @@ public class EmpresaTest {
 	}
 	
 	@Test
+	public void deve_testar_o_getEmail() {
+		empresa.setSite("www.gbconsertos.com.br");
+		assertEquals(empresa.getSite(), empresa.getSite());
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_null_no_email() {
+		empresa.setSite(null);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_vazio_no_email() {
+		empresa.setSite("");
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_espacos_em_branco_no_email() {
+		empresa.setSite("  ");
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void deve_testar_exception_do_setEmail_tamanho_menor() {
+		empresa.setSite("a");
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void deve_testar_exception_do_setEmail_tamanho_limite() {
+		empresa.setSite("abcabcabcabcabcabcabcbcabcabcaabcabcabcabcabcaabca"
+				+ "bcabcabcabcabcabcaabcabcabcabxc@gmail.com");
+	}
+	
+	@Test
+	public void deve_testar_exception_do_setEmail_tamanho_maior() {
+		empresa.setSite("abcabcabcabcabcabcabcabcasfghg"
+				+ "fsdaabcabcabcacabbxc@gmail.com");
+	}
+	
+	
+	@Test
 	public void deve_testar_o_getTelefone() {
 		empresa.setTelefones(telefones);
-		assertEquals(empresa.getTelefone(), telefone);
+		assertEquals(empresa.getTelefone(), telefones);
 	}
 	
 	@Test
 	public void deve_testar_o_getEndereco() {
 		empresa.setEnderecos(enderecos);
-		assertEquals(empresa.getEndereco(), endereco);
+		assertEquals(empresa.getEndereco(), enderecos);
 	}
 	
 	@Test

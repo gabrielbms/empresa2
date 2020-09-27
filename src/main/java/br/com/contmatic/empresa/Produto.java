@@ -2,6 +2,7 @@ package br.com.contmatic.empresa;
 
 import static br.com.contmatic.util.Constantes.ID_MINIMO;
 import static br.com.contmatic.util.Constantes.ID_VAZIO;
+import static br.com.contmatic.util.Constantes.NOME_INVALIDO;
 import static br.com.contmatic.util.Constantes.NOME_MAX_SIZE;
 import static br.com.contmatic.util.Constantes.NOME_MIN_SIZE;
 import static br.com.contmatic.util.Constantes.NOME_VAZIO;
@@ -11,10 +12,16 @@ import static br.com.contmatic.util.Constantes.QUANTIDADE_MINIMA;
 import static br.com.contmatic.util.Constantes.QUANTIDADE_MINIMA_MENSAGEM;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_NOME_GRANDE_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_NOME_PEQUENO_DEMAIS;
+import static br.com.contmatic.util.RegexType.validaSeNaoTemEspacosIncorretosECaracteresEspeciaos;
 
 import java.math.BigDecimal;
 
 import javax.validation.constraints.Pattern;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import br.com.contmatic.util.Constantes;
 import br.com.contmatic.util.RegexType;
@@ -64,7 +71,14 @@ public class Produto {
 
 	public void setNome(String nome) {
 		this.validaNomeIncorreto(nome);
+		this.validaEspacosIncorretosECaracteresEspeciaisNoNome(nome);
 		this.nome = nome;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciaisNoNome(String nome) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(nome)) {
+			throw new IllegalArgumentException(NOME_INVALIDO);
+		}
 	}
 	
 	private void validaNomeIncorreto(String nome) {
@@ -122,49 +136,19 @@ public class Produto {
 		}
 	}
 
-
-	@Override
-	public String toString() {
-
-		StringBuilder sb = new StringBuilder();
-		if (this.id != 0) {
-			sb.append("id= ").append(this.id);
-		}
-		if (this.nome != null) {
-			sb.append(" nome= ").append(this.nome);
-		}
-		if (this.quantidade != 0) {
-			sb.append(" quantidade= ").append(this.quantidade);
-		}
-		if (this.preco != BigDecimal.valueOf(0)) {
-			sb.append(" preço= ").append(this.preco);
-		}
-		return sb.toString();
-	}
-
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
+		return HashCodeBuilder.reflectionHashCode(this);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Produto other = (Produto) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+		return EqualsBuilder.reflectionEquals(this, obj);
+	}
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 }

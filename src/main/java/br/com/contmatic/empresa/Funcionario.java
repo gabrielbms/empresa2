@@ -1,21 +1,38 @@
 package br.com.contmatic.empresa;
 
+import static br.com.contmatic.util.Constantes.CPF_INCORRETO;
+import static br.com.contmatic.util.Constantes.CPF_INVALIDO;
 import static br.com.contmatic.util.Constantes.CPF_SIZE;
 import static br.com.contmatic.util.Constantes.CPF_VAZIO;
+import static br.com.contmatic.util.Constantes.DATA_CONTRATACAO_FUTURA;
+import static br.com.contmatic.util.Constantes.DATA_CONTRATACAO_VAZIA;
+import static br.com.contmatic.util.Constantes.DATA_SALARIO_FUTURA;
+import static br.com.contmatic.util.Constantes.DATA_SALARIO_NULA;
+import static br.com.contmatic.util.Constantes.ENDERECO_QTDE_MAX;
+import static br.com.contmatic.util.Constantes.ENDERECO_QTDE_MINIMA;
 import static br.com.contmatic.util.Constantes.ENDERECO_VAZIO;
 import static br.com.contmatic.util.Constantes.IDADE_MINIMA;
 import static br.com.contmatic.util.Constantes.IDADE_MINIMA_MENSAGEM;
+import static br.com.contmatic.util.Constantes.NOME_INCORRETO;
+import static br.com.contmatic.util.Constantes.NOME_INVALIDO;
 import static br.com.contmatic.util.Constantes.NOME_MAX_SIZE;
 import static br.com.contmatic.util.Constantes.NOME_MIN_SIZE;
+import static br.com.contmatic.util.Constantes.NOME_TAMANHO;
 import static br.com.contmatic.util.Constantes.NOME_VAZIO;
 import static br.com.contmatic.util.Constantes.SALARIO_MINIMO;
 import static br.com.contmatic.util.Constantes.SALARIO_MINIMO_MENSAGEM;
+import static br.com.contmatic.util.Constantes.SALARIO_NEGATIVO;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_CPF_GRANDE_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_CPF_PEQUENO_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_NOME_GRANDE_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_NOME_PEQUENO_DEMAIS;
+import static br.com.contmatic.util.Constantes.TELEFONE_QTDE_MAX;
+import static br.com.contmatic.util.Constantes.TELEFONE_QTDE_MINIMA;
 import static br.com.contmatic.util.Constantes.TELEFONE_VAZIO;
-import static br.com.contmatic.util.RegexType.NOME;
+import static br.com.contmatic.util.RegexType.LETRAS;
+import static br.com.contmatic.util.RegexType.NUMEROS;
+import static br.com.contmatic.util.RegexType.validaSeNaoTemEspacosIncorretosECaracteresEspeciaos;
+import static br.com.contmatic.util.Validate.isNotCPF;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -48,47 +65,48 @@ import br.com.contmatic.telefone.Telefone;
 public class Funcionario {
 
 	/** The cpf. */
-	@CPF(message = "O CPF do cliente está inválido")
-	@NotNull(message = "O campo CPF não pode estar nulo")
+	@CPF(message = CPF_INVALIDO)
+	@NotNull(message = CPF_VAZIO)
+	@Pattern(regexp = NUMEROS, message = CPF_INCORRETO)
 	private String cpf;
 
 	/** The nome. */
-	@NotBlank(message = "O campo nome não pode estar vazio")
-	@Pattern(regexp = NOME, message = "O nome do funcionário está incorreto")
-	@Size(min = 2, max = 80, message = "O nome mínimo é de {min} caracteres e no máximo de {max} caracteres")
+	@NotBlank(message = NOME_VAZIO)
+	@Pattern(regexp = LETRAS, message = NOME_INCORRETO)
+	@Size(min = 2, max = 80, message = NOME_TAMANHO)
 	private String nome;
 
 	/** The idade. */
 	@NotEmpty
-	@Min(value = 1, message = "A idade do funcionario não pode ser menor que 1")
+	@Min(value = 1, message = IDADE_MINIMA_MENSAGEM)
 	private Integer idade;
 
 	/** The telefones. */
 	@Valid
-	@NotNull(message = "O telefone do funcionario não pode ser vazio")
-	@Size.List({ @Size(min = 1, message = "os telefones do funcionario não devem ser menor que um"),
-			@Size(max = 3, message = "O máximo de telefones que podem ser salvo totaliza {max} telefones") })
+	@NotNull(message = TELEFONE_VAZIO)
+	@Size.List({ @Size(min = 1, message = TELEFONE_QTDE_MINIMA),
+			@Size(max = 3, message = TELEFONE_QTDE_MAX) })
 	private Set<Telefone> telefones;
 
 	/** The enderecos. */
 	@Valid
-	@NotNull(message = "O endereço da empresa está vazio")
-	@Size.List({ @Size(min = 1, message = "Tem que cadastrar pelo menos um endereço"),
-			@Size(max = 3, message = "A quantidade máxima de endeços é {max} endereços") })
+	@NotNull(message = ENDERECO_VAZIO)
+	@Size.List({ @Size(min = 1, message = ENDERECO_QTDE_MINIMA),
+			@Size(max = 3, message = ENDERECO_QTDE_MAX) })
 	private Set<Endereco> enderecos;
 
 	/** The salario. */
-	@Min(value = 1, message = "O salário do funcionário não pode ser negativo")
+	@Min(value = 1, message = SALARIO_NEGATIVO)
 	private BigDecimal salario;
 
 	/** The data contratacao. */
-	@NotNull(message = "A data de contratação do funcionario não deve estar nula")
-	@Past(message = "A data de contratação não pode ser maior que a data atual")
+	@NotNull(message = DATA_CONTRATACAO_VAZIA)
+	@Past(message = DATA_CONTRATACAO_FUTURA)
 	private LocalDate dataContratacao;
 
 	/** The data salario. */
-	@Future(message = "A data do salario deve ser maior que a data atual")
-	@NotNull(message = "A data do salário do funcionario não deve estar nula")
+	@Future(message = DATA_SALARIO_FUTURA)
+	@NotNull(message = DATA_SALARIO_NULA)
 	private LocalDate dataSalario;
 
 	/**
@@ -113,15 +131,19 @@ public class Funcionario {
 	 * @param telefone the telefone
 	 * @param endereco the endereco
 	 * @param salario  the salario
+	 * @param endereco the dataContratacao
+	 * @param salario  the dataSalario
 	 */
-	public Funcionario(String cpf, String nome, int idade, @Valid Set<Telefone> telefone, @Valid Set<Endereco> endereco,
-			BigDecimal salario) {
+	public Funcionario(String cpf, String nome, Integer idade, Set<Telefone> telefone, Set<Endereco> endereco,
+			BigDecimal salario, LocalDate dataContratacao, LocalDate dataSalario) {
 		this.setCpf(cpf);
 		this.setNome(nome);
 		this.setIdade(idade);
 		this.setTelefones(telefone);
 		this.setEnderecos(endereco);
 		this.setSalario(salario);
+		this.setDataContratacao(dataContratacao);
+		this.setDataSalario(dataSalario);
 	}
 
 	/**
@@ -137,7 +159,21 @@ public class Funcionario {
 
 	public void setCpf(String cpf) {
 		this.validaCpfIncorreto(cpf);
+		this.validaCalculoCpf(cpf);
+		this.validaEspacosIncorretosECaracteresEspeciais(cpf);
 		this.cpf = cpf;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciais(String cpf) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(cpf)) {
+			throw new IllegalArgumentException(CPF_INVALIDO);
+		}
+	}
+	
+	private void validaCalculoCpf(String cpf) {
+		if (isNotCPF(cpf)) {
+			throw new IllegalStateException(CPF_INVALIDO);
+		}
 	}
 	
 	private void validaCpfIncorreto(String cpf) {
@@ -170,7 +206,14 @@ public class Funcionario {
 
 	public void setNome(String nome) {
 		this.validaNomeIncorreto(nome);
+		this.validaEspacosIncorretosECaracteresEspeciaisNoNome(nome);
 		this.nome = nome;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciaisNoNome(String nome) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(nome)) {
+			throw new IllegalArgumentException(NOME_INVALIDO);
+		}
 	}
 	
 	private void validaNomeIncorreto(String nome) {

@@ -195,8 +195,8 @@ public class ProdutoTest {
 
 	@Test
 	public void deve_retornar_false_no_equals_com_produtos_de_ids_diferentes() {
-		Produto produto1 = new Produto(2, "teste", 3, BigDecimal.valueOf(500.00));
-		Produto produto2 = new Produto(3, "teste", 3, BigDecimal.valueOf(500.00));
+		Produto produto1 = new Produto(2, "teste");
+		Produto produto2 = new Produto(3, "teste");
 		assertNotEquals(produto1, produto2);
 	}
 

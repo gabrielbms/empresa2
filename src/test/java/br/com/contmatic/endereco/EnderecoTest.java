@@ -315,11 +315,6 @@ public class EnderecoTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void nao_deve_aceitar_numeros_na_cidade() {
-		endereco.setCidade("04517020");
-	}
-
-	@Test(expected = IllegalArgumentException.class)
 	public void nao_deve_aceitar_null_na_cidade() {
 		endereco.setCidade(null);
 	}

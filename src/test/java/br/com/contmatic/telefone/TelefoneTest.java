@@ -2,7 +2,6 @@ package br.com.contmatic.telefone;
 
 import static br.com.contmatic.telefone.TelefoneDDDType.DDD11;
 import static br.com.contmatic.telefone.TelefoneType.CELULAR;
-import static br.com.contmatic.telefone.TelefoneType.FIXO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -114,8 +113,8 @@ public class TelefoneTest {
 
 	@Test
 	public void deve_testar_se_o_valida_tipo_telefone_esta_funcionando() {
-		telefone.setNumero("27219689");
-		assertEquals(FIXO, telefone.getTipoTelefone());
+		Telefone telefoneDdd = new Telefone(DDD11, "978457845", CELULAR);
+		assertEquals(CELULAR, telefoneDdd.getTipoTelefone());
 	}
 
 	@Test

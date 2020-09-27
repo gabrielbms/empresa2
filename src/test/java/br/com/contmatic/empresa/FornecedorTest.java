@@ -208,6 +208,17 @@ public class FornecedorTest {
 		assertEquals(fornecedor.getTelefone(), telefones);
 	}
 	
+	@Test(expected = IllegalArgumentException.class)
+	public void deve_testar_o_exception_do_setTelefone() {
+		Set<Telefone> telefones2 = new HashSet<>();
+		Telefone telefone1 = new Telefone(DDD11, "978457845", CELULAR);
+		telefones2.add(telefone1);
+		Telefone telefone2 = new Telefone(DDD11, "978457846", CELULAR);
+		telefones2.add(telefone2);
+		fornecedor.setTelefones(telefones2);
+		assertEquals(fornecedor.getTelefone(), telefones2);
+	}
+	
 	@Test
 	public void deve_testar_o_getProduto() {
 		produtos.add(produto);
@@ -219,6 +230,17 @@ public class FornecedorTest {
 	public void deve_testar_o_getEndereco() {
 		fornecedor.setEnderecos(enderecos);
 		assertEquals(fornecedor.getEndereco(), enderecos);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void deve_testar_o_exception_do_setEnderecos() {
+		Set<Endereco> enderecos2 = new HashSet<>();
+		Endereco telefone1 = new Endereco("02514784", 25);
+		enderecos2.add(telefone1);
+		Endereco telefone2 = new Endereco("02514787", 29);
+		enderecos2.add(telefone2);
+		fornecedor.setEnderecos(enderecos2);
+		assertEquals(fornecedor.getTelefone(), enderecos2);
 	}
 
 	@Test
@@ -264,8 +286,8 @@ public class FornecedorTest {
 
 	@Test
 	public void deve_retornar_false_no_equals_com_fornecedores_de_cnpj_diferentes() {
-		Fornecedor fornecedor1 = new Fornecedor("97904702000131", "CA peças LTDA");
-		Fornecedor fornecedor2 = new Fornecedor("43202648000153", "CA peças LTDA");
+		Fornecedor fornecedor1 = new Fornecedor("97904702000131", "CA peças LTDA", telefones, produtos, enderecos);
+		Fornecedor fornecedor2 = new Fornecedor("43202648000153", "CA peças LTDA", telefones, produtos, enderecos);
 		assertNotEquals(fornecedor2, fornecedor1);
 	}
 

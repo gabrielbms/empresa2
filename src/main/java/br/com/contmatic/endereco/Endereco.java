@@ -3,21 +3,32 @@ package br.com.contmatic.endereco;
 import static br.com.contmatic.util.Constantes.BAIRRO_INCORRETO;
 import static br.com.contmatic.util.Constantes.BAIRRO_MAX_SIZE;
 import static br.com.contmatic.util.Constantes.BAIRRO_MIN_SIZE;
+import static br.com.contmatic.util.Constantes.BAIRRO_VAZIO;
 import static br.com.contmatic.util.Constantes.CEP_INCORRETO;
+import static br.com.contmatic.util.Constantes.CEP_INVALIDO;
 import static br.com.contmatic.util.Constantes.CEP_SIZE;
+import static br.com.contmatic.util.Constantes.CEP_VAZIO;
 import static br.com.contmatic.util.Constantes.CIDADE_INCORRETO;
 import static br.com.contmatic.util.Constantes.CIDADE_MAX_SIZE;
 import static br.com.contmatic.util.Constantes.CIDADE_MIN_SIZE;
+import static br.com.contmatic.util.Constantes.CIDADE_VAZIO;
 import static br.com.contmatic.util.Constantes.COMPLEMENTO_INCORRETO;
+import static br.com.contmatic.util.Constantes.COMPLEMENTO_INVALIDO;
 import static br.com.contmatic.util.Constantes.COMPLEMENTO_MAX_SIZE;
 import static br.com.contmatic.util.Constantes.COMPLEMENTO_MIN_SIZE;
+import static br.com.contmatic.util.Constantes.COMPLEMENTO_VAZIO;
 import static br.com.contmatic.util.Constantes.ESTADO_VAZIO;
 import static br.com.contmatic.util.Constantes.NUMERO_INCORRETO;
 import static br.com.contmatic.util.Constantes.NUMERO_MINIMO;
+import static br.com.contmatic.util.Constantes.NUMERO_VAZIO;
 import static br.com.contmatic.util.Constantes.RUA_INCORRETO;
+import static br.com.contmatic.util.Constantes.RUA_INVALIDA;
 import static br.com.contmatic.util.Constantes.RUA_MAX_SIZE;
 import static br.com.contmatic.util.Constantes.RUA_MIN_SIZE;
+import static br.com.contmatic.util.Constantes.RUA_VAZIA;
+import static br.com.contmatic.util.RegexType.CEP;
 import static br.com.contmatic.util.RegexType.LETRAS_NUMEROS;
+import static br.com.contmatic.util.RegexType.validaSeNaoTemEspacosIncorretosECaracteresEspeciaos;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -28,8 +39,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import br.com.contmatic.util.RegexType;
-
 /**
  * The Class Endereco.
  * 
@@ -38,40 +47,40 @@ import br.com.contmatic.util.RegexType;
 public class Endereco {
 
 	/** The cep. */
-	@NotBlank(message = "O campo cep não pode estar nulo")
-	@Pattern(regexp = RegexType.CEP, message = "O CEP do endereço está incorreto")
+	@NotBlank(message = CEP_VAZIO)
+	@Pattern(regexp = CEP, message = CEP_INCORRETO)
 	private String cep;
 
 	/** The rua. */
 	@Size(min = 2, max = 80)
-	@NotBlank(message = "O campo rua não pode estar nulo")
-	@Pattern(regexp = LETRAS_NUMEROS, message = "A rua do endereço está incorreto")
+	@NotBlank(message = RUA_VAZIA)
+	@Pattern(regexp = LETRAS_NUMEROS, message = RUA_INCORRETO)
 	private String rua;
 
 	/** The numero. */
-	@NotBlank(message = "O campo numero não pode estar nulo")
+	@NotBlank(message = NUMERO_VAZIO)
 	private Integer numero;
 
 	/** The complemento. */
 	@Size(min = 2, max = 80)
-	@NotBlank(message = "O campo complemento não pode estar nulo")
-	@Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "O complemento do endereço está incorreto")
+	@NotBlank(message = COMPLEMENTO_VAZIO)
+	@Pattern(regexp = LETRAS_NUMEROS, message = COMPLEMENTO_INCORRETO)
 	private String complemento;
 
 	/** The bairro. */
 	@Size(min = 2, max = 40)
-	@NotBlank(message = "O campo bairro não pode estar nulo")
-	@Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "O bairro do endereço está incorreto")
+	@NotBlank(message = BAIRRO_VAZIO)
+	@Pattern(regexp = LETRAS_NUMEROS, message = BAIRRO_INCORRETO)
 	private String bairro;
 
 	/** The cidade. */
 	@Size(min = 2, max = 40)
-	@NotBlank(message = "O campo cidade não pode estar nulo")
-	@Pattern(regexp = RegexType.LETRAS_NUMEROS, message = "A cidade do endereço está incorreto")
+	@NotBlank(message = CIDADE_VAZIO)
+	@Pattern(regexp = LETRAS_NUMEROS, message = CIDADE_INCORRETO)
 	private String cidade;
 
 	/** The estado. */
-	@NotBlank(message = "O campo estado não pode estar nulo")
+	@NotBlank(message = ESTADO_VAZIO)
 	private EstadoType estado;
 
 	/**
@@ -113,7 +122,14 @@ public class Endereco {
 
 	public void setCep(String cep) {
 		this.validaCepIncorreto(cep);
+		this.validaEspacosIncorretosECaracteresEspeciaisNoCep(cep);
 		this.cep = cep;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciaisNoCep(String cep) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(cep)) {
+			throw new IllegalArgumentException(CEP_INVALIDO);
+		}
 	}
 
 	private void validaCepIncorreto(String cep) {
@@ -128,7 +144,14 @@ public class Endereco {
 
 	public void setRua(String rua) {
 		this.validaRuaIncorreto(rua);
+		this.validaEspacosIncorretosECaracteresEspeciaisNaRua(rua);
 		this.rua = rua;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciaisNaRua(String rua) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(rua)) {
+			throw new IllegalArgumentException(RUA_INVALIDA);
+		}
 	}
 
 	private void validaRuaIncorreto(String rua) {
@@ -157,7 +180,14 @@ public class Endereco {
 
 	public void setComplemento(String complemento) {
 		this.validaComplementoIncorreto(complemento);
+		this.validaEspacosIncorretosECaracteresEspeciaisNoComplemento(complemento);
 		this.complemento = complemento;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciaisNoComplemento(String complemento) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(complemento)) {
+			throw new IllegalArgumentException(COMPLEMENTO_INVALIDO);
+		}
 	}
 
 	private void validaComplementoIncorreto(String complemento) {
@@ -173,7 +203,14 @@ public class Endereco {
 
 	public void setBairro(String bairro) {
 		this.validaBairroIncorreto(bairro);
+		this.validaEspacosIncorretosECaracteresEspeciaisNoBairro(bairro);
 		this.bairro = bairro;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciaisNoBairro(String bairro) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(bairro)) {
+			throw new IllegalArgumentException(BAIRRO_INCORRETO);
+		}
 	}
 
 	private void validaBairroIncorreto(String bairro) {
@@ -189,7 +226,14 @@ public class Endereco {
 
 	public void setCidade(String cidade) {
 		this.validaCidadeIncorreto(cidade);
+		this.validaEspacosIncorretosECaracteresEspeciaisNaCidade(cidade);
 		this.cidade = cidade;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciaisNaCidade(String cidade) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(cidade)) {
+			throw new IllegalArgumentException(CIDADE_INCORRETO);
+		}
 	}
 
 	private void validaCidadeIncorreto(String cidade) {

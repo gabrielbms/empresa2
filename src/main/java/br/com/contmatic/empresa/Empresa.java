@@ -1,11 +1,20 @@
 package br.com.contmatic.empresa;
 
+import static br.com.contmatic.util.Constantes.CNPJ_INCORRETO;
+import static br.com.contmatic.util.Constantes.CNPJ_INVALIDO;
 import static br.com.contmatic.util.Constantes.CNPJ_SIZE;
 import static br.com.contmatic.util.Constantes.CNPJ_VAZIO;
+import static br.com.contmatic.util.Constantes.CPF_INVALIDO;
+import static br.com.contmatic.util.Constantes.ENDERECO_QTDE_MAX;
+import static br.com.contmatic.util.Constantes.ENDERECO_QTDE_MINIMA;
 import static br.com.contmatic.util.Constantes.ENDERECO_VAZIO;
+import static br.com.contmatic.util.Constantes.NOME_INCORRETO;
+import static br.com.contmatic.util.Constantes.NOME_INVALIDO;
 import static br.com.contmatic.util.Constantes.NOME_MAX_SIZE;
 import static br.com.contmatic.util.Constantes.NOME_MIN_SIZE;
+import static br.com.contmatic.util.Constantes.NOME_TAMANHO;
 import static br.com.contmatic.util.Constantes.NOME_VAZIO;
+import static br.com.contmatic.util.Constantes.SITE_INVALIDO;
 import static br.com.contmatic.util.Constantes.SITE_MAX_SIZE;
 import static br.com.contmatic.util.Constantes.SITE_MIN_SIZE;
 import static br.com.contmatic.util.Constantes.SITE_VAZIO;
@@ -15,9 +24,14 @@ import static br.com.contmatic.util.Constantes.TAMANHO_DO_NOME_GRANDE_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_NOME_PEQUENO_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_SITE_GRANDE_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_SITE_PEQUENO_DEMAIS;
+import static br.com.contmatic.util.Constantes.TELEFONE_QTDE_MAX;
+import static br.com.contmatic.util.Constantes.TELEFONE_QTDE_MINIMA;
 import static br.com.contmatic.util.Constantes.TELEFONE_VAZIO;
-import static br.com.contmatic.util.RegexType.NOME;
+import static br.com.contmatic.util.RegexType.LETRAS_NUMEROS;
+import static br.com.contmatic.util.RegexType.NUMEROS;
 import static br.com.contmatic.util.RegexType.URL;
+import static br.com.contmatic.util.RegexType.validaSeNaoTemEspacosIncorretosECaracteresEspeciaos;
+import static br.com.contmatic.util.Validate.isNotCNPJ;
 
 import java.util.Set;
 
@@ -46,35 +60,36 @@ import br.com.contmatic.telefone.Telefone;
 public class Empresa {
 
 	/** The cnpj. */
-	@CNPJ(message = "O CNPJ do funcionario está inválido")
-	@NotBlank(message = "O campo CPF não pode estar nulo")
+	@CNPJ(message = CNPJ_INVALIDO)
+	@NotBlank(message = CNPJ_VAZIO)
+	@Pattern(regexp = NUMEROS, message = CNPJ_INCORRETO)
 	private String cnpj;
 
 	/** The nome. */
-	@NotBlank(message = "O campo nome não pode estar vazio")
-	@Pattern(regexp = NOME, message = "O nome da empresa está incorreto")
-	@Size(min = 2, max = 100, message = "O nome mínimo é de {min} caracteres e no máximo de {max} caracteres")
+	@NotBlank(message = NOME_VAZIO)
+	@Pattern(regexp = LETRAS_NUMEROS, message = NOME_INCORRETO)
+	@Size(min = 2, max = 100, message = NOME_TAMANHO)
 	private String nome;
 
 	/** The site. */
 	@URL
 	@Length(min = 5, max = 60)
-	@NotBlank(message = "O campo site não pode estar nulo")
-	@Pattern(regexp = URL, message = "O site da empresa está inválido")
+	@NotBlank(message = SITE_VAZIO)
+	@Pattern(regexp = URL, message =  SITE_INVALIDO)
 	private String site;
 
 	/** The telefones. */
 	@Valid
-	@NotNull(message = "O telefone da empresa não pode ser nulo")
-	@Size.List({ @Size(min = 1, message = "os telefones da empresa não devem ser menor que um"),
-			@Size(max = 3, message = "O máximo de telefones que podem ser salvo totaliza {max} telefones") })
+	@NotNull(message = TELEFONE_VAZIO)
+	@Size.List({ @Size(min = 1, message = TELEFONE_QTDE_MINIMA),
+			@Size(max = 3, message = TELEFONE_QTDE_MAX) })
 	private Set<Telefone> telefones;
 
 	/** The enderecos. */
 	@Valid
-	@NotNull(message = "O endereço da empresa está vazio")
-	@Size.List({ @Size(min = 1, message = "Tem que cadastrar pelo menos um endereço"),
-			@Size(max = 3, message = "A quantidade máxima de endeços é {max} endereços") })
+	@NotNull(message = ENDERECO_VAZIO)
+	@Size.List({ @Size(min = 1, message = ENDERECO_QTDE_MINIMA),
+			@Size(max = 3, message = ENDERECO_QTDE_MAX) })
 	private Set<Endereco> enderecos;
 
 	/**
@@ -105,7 +120,21 @@ public class Empresa {
 
 	public void setCnpj(String cnpj) {
 		this.validaCnpjIncorreto(cnpj);
+		this.validaCnpjInvalido(cnpj);
+		this.validaEspacosIncorretosECaracteresEspeciais(cnpj);
 		this.cnpj = cnpj;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciais(String cnpj) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(cnpj)) {
+			throw new IllegalArgumentException(CPF_INVALIDO);
+		}
+	}
+	
+	private void validaCnpjInvalido(String cnpj) {
+		if (isNotCNPJ(cnpj)) {
+			throw new IllegalStateException(CNPJ_INVALIDO);
+		}
 	}
 	
 	private void validaCnpjIncorreto(String cnpj) {
@@ -138,7 +167,14 @@ public class Empresa {
 
 	public void setNome(String nome) {
 		this.validaNomeIncorreto(nome);
+		this.validaEspacosIncorretosECaracteresEspeciaisNoNome(nome);
 		this.nome = nome;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciaisNoNome(String nome) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(nome)) {
+			throw new IllegalArgumentException(NOME_INVALIDO);
+		}
 	}
 	
 	private void validaNomeIncorreto(String nome) {
@@ -181,19 +217,19 @@ public class Empresa {
 	}
 
 	private void validaSiteMaiorQueOTamanhoMaximo(String site) {
-		if (nome.length() > SITE_MIN_SIZE) {
+		if (site.length() > SITE_MAX_SIZE) {
 			throw new IllegalArgumentException(TAMANHO_DO_SITE_GRANDE_DEMAIS);
 		}
 	}
 
 	private void validaSiteMenorQueOTamanhoMinimo(String site) {
-		if (nome.length() < SITE_MAX_SIZE) {
+		if (site.length() < SITE_MIN_SIZE) {
 			throw new IllegalArgumentException(TAMANHO_DO_SITE_PEQUENO_DEMAIS);
 		}
 	}
 
 	private void validaSiteNulloOuIncorreto(String site) {
-		if (nome == null || nome.trim().isEmpty()) {
+		if (site == null || site.trim().isEmpty()) {
 			throw new IllegalArgumentException(SITE_VAZIO);
 		}
 	}

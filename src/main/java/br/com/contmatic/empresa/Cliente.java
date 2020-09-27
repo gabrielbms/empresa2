@@ -1,15 +1,20 @@
 package br.com.contmatic.empresa;
 
 import static br.com.contmatic.util.Constantes.BOLETO_NEGATIVO;
+import static br.com.contmatic.util.Constantes.BOLETO_VAZIO;
+import static br.com.contmatic.util.Constantes.CPF_INCORRETO;
 import static br.com.contmatic.util.Constantes.CPF_INVALIDO;
 import static br.com.contmatic.util.Constantes.CPF_SIZE;
 import static br.com.contmatic.util.Constantes.CPF_VAZIO;
+import static br.com.contmatic.util.Constantes.EMAIL_INVALIDO;
 import static br.com.contmatic.util.Constantes.EMAIL_MAX_SIZE;
 import static br.com.contmatic.util.Constantes.EMAIL_MIN_SIZE;
+import static br.com.contmatic.util.Constantes.EMAIL_TAMANHO;
 import static br.com.contmatic.util.Constantes.EMAIL_VAZIO;
 import static br.com.contmatic.util.Constantes.NOME_INVALIDO;
 import static br.com.contmatic.util.Constantes.NOME_MAX_SIZE;
 import static br.com.contmatic.util.Constantes.NOME_MIN_SIZE;
+import static br.com.contmatic.util.Constantes.NOME_TAMANHO;
 import static br.com.contmatic.util.Constantes.NOME_VAZIO;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_CPF_GRANDE_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_CPF_PEQUENO_DEMAIS;
@@ -17,8 +22,14 @@ import static br.com.contmatic.util.Constantes.TAMANHO_DO_EMAIL_GRANDE_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_EMAIL_PEQUENO_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_NOME_GRANDE_DEMAIS;
 import static br.com.contmatic.util.Constantes.TAMANHO_DO_NOME_PEQUENO_DEMAIS;
+import static br.com.contmatic.util.Constantes.TELEFONE_QTDE_MAX;
+import static br.com.contmatic.util.Constantes.TELEFONE_QTDE_MINIMA;
 import static br.com.contmatic.util.Constantes.TELEFONE_VAZIO;
 import static br.com.contmatic.util.RegexType.EMAIL;
+import static br.com.contmatic.util.RegexType.LETRAS;
+import static br.com.contmatic.util.RegexType.NUMEROS;
+import static br.com.contmatic.util.RegexType.validaSeNaoTemEspacosIncorretosECaracteresEspeciaos;
+import static br.com.contmatic.util.Validate.isNotCPF;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -39,7 +50,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CPF;
 
 import br.com.contmatic.telefone.Telefone;
-import br.com.contmatic.util.RegexType;
 
 /**
  * The Class Cliente.
@@ -51,31 +61,32 @@ public class Cliente {
 	/** The cpf. */
 	@CPF(message = CPF_INVALIDO)
 	@NotNull(message = CPF_VAZIO)
+	@Pattern(regexp = NUMEROS, message = CPF_INCORRETO)
 	private String cpf;
 
 	/** The nome. */
 	@NotBlank(message = NOME_VAZIO)
-	@Pattern(regexp = RegexType.NOME, message = NOME_INVALIDO)
-	@Size(min = 2, max = 80, message = "O nome mínimo é de {min} caracteres e no máximo de {max} caracteres")
+	@Pattern(regexp = LETRAS, message = NOME_INVALIDO)
+	@Size(min = 2, max = 80, message = NOME_TAMANHO)
 	private String nome;
 
 	/** The email. */
-	@Email(message = "O email do cliente está invalido")
-	@NotBlank(message = "O campo e-mail não pode estar vazio")
-	@Pattern(regexp = EMAIL, message = "O email do cliente está invalido")
-	@Size(min = 5, max = 100, message = "O e-mail do funcionario pode ter no máximo {max} caracteres")
+	@Email(message = EMAIL_INVALIDO)
+	@NotBlank(message = EMAIL_VAZIO)
+	@Pattern(regexp = EMAIL, message = EMAIL_INVALIDO)
+	@Size(min = 5, max = 100, message = EMAIL_TAMANHO)
 	private String email;
 
 	/** The telefones. */
 	@Valid
-	@NotNull(message = "O telefone do cliente não pode ser vazio")
-	@Size.List({ @Size(min = 1, message = "os telefones do cliente não devem ser menor que um"),
-			@Size(max = 3, message = "O máximo de telefones que podem ser salvo totaliza {max} telefones") })
+	@NotNull(message = TELEFONE_VAZIO)
+	@Size.List({ @Size(min = 1, message = TELEFONE_QTDE_MINIMA),
+			@Size(max = 3, message = TELEFONE_QTDE_MAX) })
 	private Set<Telefone> telefones;
 
 	/** The boleto. */
-	@Min(value = 1, message = "O valor do boleto não pode ser negativo")
-	@NotEmpty(message = "O campo boleto não pode estar vazio")
+	@Min(value = 1, message = BOLETO_NEGATIVO)
+	@NotEmpty(message = BOLETO_VAZIO)
 	private BigDecimal boleto;
 
 	/**
@@ -106,7 +117,21 @@ public class Cliente {
 
 	public void setCpf(String cpf) {
 		this.validaCpfIncorreto(cpf);
+		this.validaCalculoCpf(cpf);
+		this.validaEspacosIncorretosECaracteresEspeciaisNoCpf(cpf);
 		this.cpf = cpf;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciaisNoCpf(String cpf) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(cpf)) {
+			throw new IllegalArgumentException(CPF_INVALIDO);
+		}
+	}
+	
+	private void validaCalculoCpf(String cpf) {
+		if (isNotCPF(cpf)) {
+			throw new IllegalStateException(CPF_INVALIDO);
+		}
 	}
 
 	private void validaCpfIncorreto(String cpf) {
@@ -139,7 +164,14 @@ public class Cliente {
 
 	public void setNome(String nome) {
 		this.validaNomeIncorreto(nome);
+		this.validaEspacosIncorretosECaracteresEspeciaisNoNome(nome);
 		this.nome = nome;
+	}
+	
+	private void validaEspacosIncorretosECaracteresEspeciaisNoNome(String nome) {
+		if (validaSeNaoTemEspacosIncorretosECaracteresEspeciaos(nome)) {
+			throw new IllegalArgumentException(NOME_INVALIDO);
+		}
 	}
 
 	private void validaNomeIncorreto(String nome) {
@@ -178,23 +210,23 @@ public class Cliente {
 	private void validaEmailIncorreto(String email) {
 		this.validaEmailNulloOuVazio(email);
 		this.validaEmailMenorQueOTamanhoMinimo(email);
-		this.validaEmailMaiorQueOTamanhoMinimo(email);
+		this.validaEmailMaiorQueOTamanhoMaximo(email);
 	}
 
-	private void validaEmailMaiorQueOTamanhoMinimo(String nome) {
-		if (nome.length() > EMAIL_MAX_SIZE) {
+	private void validaEmailMaiorQueOTamanhoMaximo(String email) {
+		if (email.length() > EMAIL_MAX_SIZE) {
 			throw new IllegalArgumentException(TAMANHO_DO_EMAIL_GRANDE_DEMAIS);
 		}
 	}
 
-	private void validaEmailMenorQueOTamanhoMinimo(String nome) {
-		if (nome.length() < EMAIL_MIN_SIZE) {
+	private void validaEmailMenorQueOTamanhoMinimo(String email) {
+		if (email.length() < EMAIL_MIN_SIZE) {
 			throw new IllegalArgumentException(TAMANHO_DO_EMAIL_PEQUENO_DEMAIS);
 		}
 	}
 
-	private void validaEmailNulloOuVazio(String nome) {
-		if (nome == null || nome.trim().isEmpty()) {
+	private void validaEmailNulloOuVazio(String email) {
+		if (email == null || email.trim().isEmpty()) {
 			throw new IllegalArgumentException(EMAIL_VAZIO);
 		}
 	}

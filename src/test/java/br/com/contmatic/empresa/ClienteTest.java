@@ -2,13 +2,20 @@ package br.com.contmatic.empresa;
 
 import static br.com.contmatic.telefone.TelefoneDDDType.DDD11;
 import static br.com.contmatic.telefone.TelefoneType.CELULAR;
+import static br.com.contmatic.util.Constantes.NOME_INVALIDO;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.runners.MethodSorters.NAME_ASCENDING;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -35,6 +42,12 @@ public class ClienteTest {
 	private Telefone telefone;
 	
 	private Set<Telefone> telefones = new HashSet<>();
+	
+	/** The validator. */
+	private Validator validator;
+	
+	/** The factory. */
+	private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
 	/**
 	 * Set up before class.
@@ -52,6 +65,23 @@ public class ClienteTest {
 		cliente = Fixture.from(Cliente.class).gimme("valido");
 		telefone = new Telefone(DDD11, "978457845", CELULAR);
 		telefones.add(telefone);
+	}
+	
+	/**
+	 * Checks if is valid.
+	 *
+	 * @param cliente  the cliente
+	 * @param mensagem the mensagem
+	 * @return true, if is valid
+	 */
+	public boolean isValid(Cliente cliente, String mensagem) {
+		validator = factory.getValidator();
+		boolean valido = true;
+		Set<ConstraintViolation<Cliente>> restricoes = validator.validate(cliente);
+		for (ConstraintViolation<Cliente> constraintViolation : restricoes)
+			if (constraintViolation.getMessage().equalsIgnoreCase(mensagem))
+				valido = false;
+		return valido;
 	}
 
 	@Test
@@ -147,9 +177,10 @@ public class ClienteTest {
 		cliente.setNome("          ");
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void nao_deve_aceitar_numeros_no_nome() {
 		cliente.setNome("123456");
+		assertFalse(isValid(cliente, NOME_INVALIDO));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -193,6 +224,44 @@ public class ClienteTest {
 	public void deve_testar_exception_do_setNome_tamanho_maior() {
 		cliente.setNome("abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcaabcabcabcabcabcaabcabcabc"
 				+ "abcabcaabcabcabcabcabcabcabcabcabcabcabxc");
+	}
+	
+	@Test
+	public void deve_testar_o_getEmail() {
+		cliente.getEmail();
+		assertEquals(cliente.getEmail(), cliente.getEmail());
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_null_no_email() {
+		cliente.setEmail(null);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_vazio_no_email() {
+		cliente.setEmail("");
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void nao_deve_aceitar_espacos_em_branco_no_email() {
+		cliente.setEmail("  ");
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void deve_testar_exception_do_setEmail_tamanho_menor() {
+		cliente.setEmail("a");
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void deve_testar_exception_do_setEmail_tamanho_limite() {
+		cliente.setEmail("abcabcabcabcabcabcabcbcabcabcaabcabcabcabcabcaabca"
+				+ "bcabcabcabcabcabcaabcabcabcabxc@gmail.com");
+	}
+	
+	@Test
+	public void deve_testar_exception_do_setEmail_tamanho_maior() {
+		cliente.setEmail("abcabcabcabcabcabcabcbcabcabcaabcabcabcabcabcaabca"
+				+ "bcabcacabcabcabcaabcabcabcabxc@gmail.com");
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -260,8 +329,8 @@ public class ClienteTest {
 
 	@Test
 	public void deve_retornar_false_no_equals_com_clientes_de_cpf_diferentes() {
-		Cliente cliente1 = new Cliente("43701888820", "Gabriel", telefones, BigDecimal.valueOf(250.00));
-		Cliente cliente2 = new Cliente("43701888819", "Gabriela", telefones, BigDecimal.valueOf(270.00));
+		Cliente cliente1 = new Cliente("14591819051", "Gabriel", telefones, BigDecimal.valueOf(250.00));
+		Cliente cliente2 = new Cliente("95341978072", "Gabriela", telefones, BigDecimal.valueOf(270.00));
 		assertNotEquals(cliente2, cliente1);
 	}
 

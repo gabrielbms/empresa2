@@ -81,10 +81,6 @@ public class Telefone {
 			throw new IllegalArgumentException(TELEFONE_PREENCHIDO_INCORRETAMENTE);
 		}
 	}
-
-	public TelefoneType getTelefone() {
-		return tipoTelefone;
-	}
 	
 	public TelefoneType getTipoTelefone() {
 		return tipoTelefone;
